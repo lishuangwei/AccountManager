@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/take_photo"
+        style="@style/SelectPhotoStyle"
+        android:text="@string/item_take_photo" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0.7dp"
+        android:background="#e5e5e5" />
+
+    <TextView
+        android:id="@+id/pick_photo"
+        style="@style/SelectPhotoStyle"
+        android:text="@string/item_pick_photo" />
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_marginTop="6.7dp"
+        style="@style/SelectPhotoStyle"
+        android:text="@android:string/cancel" />
+</LinearLayout>

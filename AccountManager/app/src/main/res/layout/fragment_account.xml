@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:action="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.android.accountmanager.ui.widget.IconItemView
+            style="@style/actionItemStyle"
+            android:id="@+id/item_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            action:key="key_account_user_header"
+            action:icon="@drawable/ic_no_image"
+            action:title="@string/summary_name_empty"
+            action:summary=""
+            action:layout="@layout/account_header_layout"
+            action:fragment="com.android.accountmanager.ui.account.DetailsFragment"
+            action:fragmentTitle="@string/title_details" />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            style="@style/actionItemStyle"
+            android:id="@+id/item_mailbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16.7dp"
+            action:key="key_account_email"
+            action:icon="@drawable/ic_item_mailbox"
+            action:title="@string/title_mailbox"
+            action:summary="@string/summary_unbind"
+            action:fragment="com.android.accountmanager.ui.account.BindEmailFragment"
+            action:fragmentTitle="@string/title_mailbox"
+            />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            style="@style/actionItemStyle"
+            android:id="@+id/item_modify_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            action:icon="@drawable/ic_item_modify_password"
+            action:title="@string/title_modify_password"
+            action:fragment="com.android.accountmanager.ui.account.ModifyPasswordFragment"
+            action:fragmentTitle="@string/title_modify_password"
+            />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            style="@style/actionItemStyle"
+            android:id="@+id/item_getback_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            action:icon="@drawable/ic_item_getback_password"
+            action:title="@string/title_getback_password"
+            />
+
+        <Button
+            android:id="@+id/action_sign_out"
+            android:layout_width="320dp"
+            android:layout_height="44.7dp"
+            android:textColor="#fd4a4f"
+            android:textSize="@dimen/text_larger_size"
+            android:background="@drawable/bt_border_bg"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="170dp"
+            android:text="@string/action_sign_out"
+            />
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+</FrameLayout>

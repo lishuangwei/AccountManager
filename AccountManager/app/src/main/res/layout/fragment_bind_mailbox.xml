@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_max_height"
+        android:background="@color/text_blue_color"
+        android:gravity="center_horizontal"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
+
+        <View
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@+id/empty"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_back_selector" />
+
+            <TextView
+                android:id="@+id/custom_actionbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/title_bind_mailbox"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        style="@style/formStyle"
+        android:layout_height="32.7dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/warn_image"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_input_correct" />
+
+        <TextView
+            android:id="@+id/warn_text"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/toast_bind_mailbox"
+            android:textColor="@color/text_green" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/formStyle"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/label_mailbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_label_mailbox" />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_mailbox"
+            style="@style/editStyle"
+            android:hint="@string/title_mailbox"
+            android:inputType="textEmailAddress" />
+
+        <ImageView
+            android:id="@+id/mailbox_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <View style="@style/dividerStyle" />
+
+    <LinearLayout style="@style/formStyle">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/label_vercode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_label_vercode" />
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_vercode"
+                style="@style/editStyle"
+                android:hint="@string/text_login_vercode_hint" />
+
+            <ImageView
+                android:id="@+id/vercode_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@id/send_vercode"
+            android:layout_width="122dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/action_bt_bg"
+            android:gravity="center"
+            android:maxLength="8"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:text="@string/action_send_vercode"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_normal_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:text="@string/hint_mailbox_vercode"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_normal_size" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/action_complete"
+        style="@style/stepButtonStyle"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="@string/action_complete" />
+
+</LinearLayout>

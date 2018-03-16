@@ -1,0 +1,136 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/windowbackground</item>
+        <item name="homeAsUpIndicator">@drawable/ic_back_selector</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AccountTheme" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/AccountAnimation</item>
+        <item name="alertDialogTheme">@style/CustomAlertDialogTheme</item>
+        <item name="alertDialogStyle">@style/CustomAlertDialogStyle</item>
+    </style>
+
+    <style name="CustomAlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@color/windowbackground</item>
+    </style>
+
+    <style name="CustomAlertDialogStyle" parent="AlertDialog.AppCompat.Light">
+        <item name="android:layout">@layout/custom_alert_dialog_layout</item>
+    </style>
+
+    <style name="AccountAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+    </style>
+
+    <style name="login_rg_rb">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/login_rg_rb_selector</item>
+        <item name="android:textSize">@dimen/text_larger</item>
+    </style>
+
+    <style name="editStyle">
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColorHint">@color/text_edit_hint_color</item>
+        <item name="android:textSize">@dimen/text_larger_size</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="labelStyle">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_larger</item>
+    </style>
+
+    <style name="formStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44.7dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="dividerStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">14.7dp</item>
+    </style>
+
+    <style name="actionItemStyle">
+        <item name="android:background">@drawable/action_item_background</item>
+    </style>
+
+    <style name="stepButtonStyle">
+        <item name="android:background">@drawable/action_bt_bg</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44.7dp</item>
+        <item name="android:textSize">@dimen/text_larger_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="LoginTextStyle">
+        <item name="android:textColor">@color/text_normal_color</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+    </style>
+
+    <style name="BottomDialog" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowAnimationStyle">@style/dialogAnim</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="dialogAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/bottomview_anim_enter</item>
+        <item name="android:windowExitAnimation">@anim/bottomview_anim_exit</item>
+    </style>
+
+    <style name="SelectPhotoStyle">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">46.7dp</item>
+        <item name="android:textColor">@drawable/photo_bg_selecter</item>
+        <item name="android:textSize">@dimen/text_larger_size</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="UserInfoDialogStyle" parent="@style/BottomDialog">
+        <item name="android:background">@drawable/update_userinfo_border</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+</resources>

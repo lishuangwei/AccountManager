@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="48dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/formStyle">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_label_phonenumber"
+            android:tint="@color/system_blue" />
+
+        <android.support.design.widget.TextInputEditText
+            style="@style/editStyle"
+            android:id="@+id/et_login_name"
+            android:hint=""
+            android:inputType="phone" />
+    </LinearLayout>
+
+    <View
+        style="@style/dividerStyle"/>
+
+    <LinearLayout
+        style="@style/formStyle">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_label_vercode"
+            android:tint="@color/system_blue" />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/et_vercode"
+            style="@style/editStyle"
+            android:hint=""/>
+
+        <TextView
+            android:id="@id/send_vercode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/action_bt_bg"
+            android:gravity="center"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:textSize="@dimen/text_small"
+            android:textColor="@color/gray"
+            android:text="@string/action_send_vercode" />
+    </LinearLayout>
+
+    <Button
+        style="@style/stepButtonStyle"
+        android:id="@+id/action_complete"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:text="@string/action_complete" />
+
+</LinearLayout>

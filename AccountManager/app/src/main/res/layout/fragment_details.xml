@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:action="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_max_height"
+        android:background="@color/text_blue_color"
+        android:gravity="center_horizontal"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
+
+        <View
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true" />
+
+        <RelativeLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@+id/empty">
+
+            <ImageView
+                android:id="@+id/image_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_back_selector" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/title_details"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+=
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/top_max_height"
+        android:orientation="vertical">
+
+        <com.android.accountmanager.ui.widget.IconItemView
+            android:id="@+id/item_header"
+            style="@style/actionItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            action:fragment="com.android.accountmanager.ui.account.PhotoPickFragment"
+            action:icon="@drawable/ic_no_image_small"
+            action:key="key_account_icon"
+            action:layout="@layout/account_photo_layout"
+            action:summary="@string/summary_eidt_photo" />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            android:id="@+id/item_name"
+            style="@style/actionItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17.3dp"
+            action:fragment="com.android.accountmanager.ui.account.SetNameFragment"
+            action:fragmentTitle="@string/title_name"
+            action:key="key_account_name"
+            action:summary="@string/summary_settings"
+            action:title="@string/title_name" />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            android:id="@+id/item_phone_number"
+            style="@style/actionItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            action:fragment="com.android.accountmanager.ui.account.PhoneNumberFragment"
+            action:fragmentTitle="@string/label_phone_number"
+            action:key="key_account_tel"
+            action:summary="@string/summary_settings"
+            action:title="@string/title_phone_number" />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            android:id="@+id/item_birthday"
+            style="@style/actionItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            action:fragment="com.android.accountmanager.ui.account.SetBirthdayFragment"
+            action:fragmentTitle="@string/title_select_birthday"
+            action:key="key_account_birthday"
+            action:summary="@string/summary_settings"
+            action:title="@string/title_birthday" />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            android:id="@+id/item_sex"
+            style="@style/actionItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            action:fragment="com.android.accountmanager.ui.account.SelectGenderFragment"
+            action:fragmentTitle="@string/title_select_gender"
+            action:key="key_account_sex"
+            action:summary="@string/summary_settings"
+            action:title="@string/title_sex" />
+
+        <com.android.accountmanager.ui.widget.ActionItemView
+            android:id="@+id/item_region"
+            style="@style/actionItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17.3dp"
+            action:key="key_account_area"
+            action:summary="@string/summary_select_region"
+            action:title="@string/title_region" />
+    </LinearLayout>
+
+</FrameLayout>

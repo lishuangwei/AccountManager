@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="ActionItemView">
+        <attr name="key" format="string"/>
+        <attr name="icon"/>
+        <attr name="title"/>
+        <attr name="summary"/>
+        <attr name="fragment"/>
+        <attr name="fragmentTitle" format="string"/>
+        <attr name="layout"/>
+    </declare-styleable>
+</resources>

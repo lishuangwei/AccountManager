@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="选择性别"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_larger_size" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="26dp"
+        android:layout_marginTop="35dp">
+
+        <RadioButton
+            android:id="@+id/radio_man"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="@drawable/single_choice_selector"
+            android:text="@string/item_male"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_biggist_size" />
+
+        <RadioButton
+            android:id="@+id/radio_feman"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:button="@null"
+            android:drawableRight="@drawable/single_choice_selector"
+            android:text="@string/item_female"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_biggist_size" />
+    </RadioGroup>
+</LinearLayout>

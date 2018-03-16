@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="windowbackground">#ffffff</color>
+    <color name="colorPrimary">#87CEFF</color>
+    <color name="colorPrimaryDark">#7EC0EE</color>
+    <color name="colorAccent">#FF8247</color>
+    <color name="action_bg_normal">#7EC0EE</color>
+    <color name="action_bg_disable">#e5e5e5</color>
+
+    <color name="pp_main_color">#7EC0EE</color>
+
+    <color name="gray">#999999</color>
+
+    <color name="ripple_color">#a6a6a6</color>
+
+    <color name="line_color">#b1afaf</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="path_color">#000000</color>
+
+    <color name="system_blue">#ff0b89f3</color>
+    <color name="system_gray">#ffd9d9d9</color>
+
+    <color name="text_normal_color">#c0ffffff</color>
+    <color name="text_blue_color">#4479ff</color>
+    <color name="text_edit_hint_color">#acacac</color>
+    <color name="label_image_noraml">#838383</color>
+    <color name="label_image_focus">#4479ff</color>
+    <color name="label_image_enbale_color">#dedede</color>
+    <color name="error_text_color">#ff5151</color>
+    <color name="dialog_content_text_color">#838383</color>
+
+    <color name="user_header_summary_color">#777777</color>
+    <drawable name="actionbar">#00000000</drawable>
+    <color name="text_green">#22d47a</color>
+</resources>

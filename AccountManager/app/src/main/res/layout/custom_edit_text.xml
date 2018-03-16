@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/update_layout"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/update_userinfo_border"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="姓名"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_larger_size" />
+
+    <EditText
+        android:id="@+id/edittext_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/edit_border_bg"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:text="@string/network_not_link"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_biggist_size" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44.7dp"
+        android:layout_marginBottom="27dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_cancel"
+            android:layout_width="122.7dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_register_bg"
+            android:text="@android:string/cancel"
+            android:textColor="@color/text_blue_color" />
+
+        <Button
+            android:id="@+id/bt_ok"
+            android:layout_width="122.7dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/button_login_bg"
+            android:text="@android:string/ok"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>
+
+

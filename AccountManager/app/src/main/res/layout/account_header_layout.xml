@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_account_background"
+    android:clipToPadding="false"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp">
+
+    <ImageView
+        android:id="@+id/image_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:src="@drawable/ic_back_selector" />
+
+    <ImageView
+        android:layout_marginTop="10dp"
+        android:id="@+id/icon"
+        android:layout_width="@dimen/account_photo_size"
+        android:layout_height="@dimen/account_photo_size" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="22.7sp" />
+
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="10"
+        android:textColor="#a6ffffff"
+        android:textSize="@dimen/text_normal_size" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_arrow"
+        android:visibility="gone" />
+
+</LinearLayout>

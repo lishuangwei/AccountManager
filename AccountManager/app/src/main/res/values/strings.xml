@@ -1,0 +1,116 @@
+<resources>
+    <string name="app_name">账户管理系统</string>
+    <string name="action_account">用户</string>
+    <string name="action_settings">设置</string>
+    <string name="action_login">登录</string>
+    <string name="action_register">注册</string>
+    <string name="action_forget_pwd">忘记密码?</string>
+    <string name="action_next_step">下一步</string>
+    <string name="action_complete">完成</string>
+    <string name="action_unbind">解绑</string>
+    <string name="action_change_mail">更换邮箱</string>
+    <string name="action_change_phone">更换手机</string>
+    <string name="action_send_vercode">获取验证码</string>
+    <string name="action_send_vercode_disable">%1$d后重新获取</string>
+    <string name="action_sign_out">退出登录</string>
+    <string name="action_input_password">输入账户密码</string>
+
+    <string name="label_account">账户</string>
+    <string name="label_password">密码</string>
+    <string name="label_confirm_password">确认密码</string>
+    <string name="label_phone_number">手机号</string>
+    <string name="label_vercode">验证码</string>
+    <string name="login_type_password">账户密码登录</string>
+    <string name="login_type_vercode">验证码登录</string>
+    <string name="format_size">6-16位字符</string>
+    <string name="format_content">包含数字和英文字母</string>
+    <string name="title_details">详细信息</string>
+    <string name="title_mailbox">邮箱</string>
+    <string name="title_modify_password">修改密码</string>
+    <string name="title_getback_password">找回密码</string>
+    <string name="title_name">姓名</string>
+    <string name="title_phone_number">@string/label_phone_number</string>
+    <string name="title_birthday">生日</string>
+    <string name="title_select_birthday">选择生日</string>
+    <string name="title_sex">性别</string>
+    <string name="title_select_gender">选择性别</string>
+    <string name="title_region">地区</string>
+    <string name="title_set_new_password">设置新密码</string>
+    <string name="title_verify_password">验证密码</string>
+    <string name="title_bind_mailbox">绑定邮箱</string>
+    <string name="title_bind_phone">绑定手机</string>
+
+    <string name="verify_type_phone_number">切换为手机验证</string>
+    <string name="verify_type_mailbox">切换为邮箱验证</string>
+
+    <string name="summary_name_empty">点击完善信息</string>
+    <string name="summary_bind">绑定</string>
+    <string name="summary_unbind">未绑定</string>
+    <string name="summary_eidt_photo">编辑头像</string>
+    <string name="summary_settings">@string/action_settings</string>
+    <string name="summary_select_region">选择地区</string>
+
+    <string name="hint_mailbox_vercode">查看邮箱获取验证码</string>
+
+    <string name="item_take_photo">拍照</string>
+    <string name="item_pick_photo">从图库选择</string>
+    <string name="item_male">男</string>
+    <string name="item_female">女</string>
+    <string name="item_nofemale">人妖</string>
+
+    <string name="photo_file_provider_authority" translatable="false">com.android.accountmanager.files</string>
+    <string name="accountPhotoSavedErrorToast">无法保存用户照片更改</string>
+    <string name="photoPickerNotFoundText">手机上没有照片</string>
+    <string name="format_birthday" translatable="false">%1$d-%2$02d-%3$02d</string>
+
+    <string name="toast_please_input_correct_phone_number">请输入正确的手机号</string>
+    <string name="toast_please_input_correct_mailbox">请输入正确的邮箱</string>
+    <string name="toast_please_input_correct">请输入正确的手机号或者邮箱</string>
+    <string name="toast_login_name_not_regular">登录名不合法</string>
+    <string name="toast_vercode_error">验证码错误</string>
+    <string name="toast_password_error">密码错误</string>
+    <string name="toast_account_password_error">用户名或密码错误</string>
+    <string name="toast_account_not_exist">用户不存在</string>
+    <string name="toast_account_exist">用户已存在</string>
+    <string name="toast_phonenumber_is_used">该手机号已被注册</string>
+    <string name="toast_mailbox_is_used">该邮箱已被注册</string>
+    <string name="toast_password_format">密码长度为6-16位之间</string>
+    <string name="toast_password_not_equals">两次输入的密码不一致</string>
+    <string name="toast_register_success">注册成功</string>
+    <string name="toast_register_failed">注册失败</string>
+    <string name="toast_network_exception">网络异常</string>
+    <string name="toast_invalid_param">无效参数</string>
+    <string name="toast_unknown_error">未知错误</string>
+    <string name="toast_param_error">参数错误</string>
+    <string name="toast_login_success">登陆成功</string>
+    <string name="toast_bind_mailbox">绑定成功</string>
+    <string name="toast_reset_password_success">设置成功</string>
+    <string name="toast_unbind_email_success">解绑成功</string>
+    <string name="toast_permission_granted">权限获取成功</string>
+    <string name="toast_permission_not_granted">可能导致部分功能无法正常使用</string>
+
+    <string name="page_normal_problem">常见问题</string>
+    <string name="page_my_feedback">我的反馈</string>
+    <string name="third_party_application">第三方应用</string>
+    <string name="feedback_title">你的问题</string>
+    <string name="feedback_content">请描述您遇到的问题，提交问题需要连接网络。\n如果您有多个问题，请用换行符分开，以便我们更好地识别您的问题</string>
+    <string name="feedback_commit">提交</string>
+    <string name="feedback_commit_toast">反馈已提交，感谢您的反馈</string>
+    <string name="feedback_need_login">登陆后即可反馈相应问题</string>
+    <string name="feedback_empty_list">暂无反馈问题</string>
+    <string name="feedback_login">立即登录</string>
+    <string name="feedback_commit_null">提交内容不可为空</string>
+
+    <string name="network_not_link">网络未连接</string>
+    <string name="network_check">请检查网络设置是否正常</string>
+    <string name="network_set">设置网络</string>
+
+    <string name="text_login_name_hint">手机号/邮箱</string>
+    <string name="text_login_password_hint">密码</string>
+    <string name="text_login_vercode_hint">验证码</string>
+    <string name="text_singout_hit">请输入账号密码,以退出登录</string>
+    <string name="text_currrent_accoutn">当前账户</string>
+    <string name="text_new_password_hint">新密码</string>
+    <string name="text_password_not_equals">两次密码输入不一致,请重新输入</string>
+    <string name="text_password_incorrect">密码错误,请重新输入</string>
+</resources>
