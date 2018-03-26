@@ -19,6 +19,8 @@ import com.android.accountmanager.base.BaseFragment;
 import com.android.accountmanager.commom.RequestUri;
 import com.android.accountmanager.utils.StringUtils;
 
+import java.security.PrivilegedAction;
+
 public class LoginFragment extends BaseFragment implements View.OnClickListener, View.OnFocusChangeListener, TextWatcher {
     private TextInputEditText mEditLoginName, mEditPassword, mEditVercode;
     private TextView mLoginWayView, mActionSendVercode;
@@ -26,7 +28,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     private View mActionLogin;
     private CompoundButton mSwitchShowPassword;
     private boolean mIsVercodeLogin;
-    private ImageView mImgName, mImgPassword, mImgVerdode, mImgNameDelete, mImgPasswordDelete, mImgVerdodeDelete;
+    private ImageView mImgName, mImgPassword, mImgVerdode, mImgNameDelete, mImgPasswordDelete, mImgVerdodeDelete,mImgBack;
     private LinearLayout mLinear;
     private TextView mTextError;
     private static LoginFragment mLoginFragment;
@@ -66,6 +68,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         mImgVerdodeDelete.setOnClickListener(this);
         mLinear = (LinearLayout) parentView.findViewById(R.id.error_layout);
         mTextError = (TextView) parentView.findViewById(R.id.error_text);
+        mImgBack = (ImageView) parentView.findViewById(R.id.image_back);
+        mImgBack.setOnClickListener(this);
 
         mActionRegister = parentView.findViewById(R.id.action_to_register);
         mActionRegister.setOnClickListener(this);
@@ -145,6 +149,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 loginView.startForgetPassword();
                 break;
             case R.id.wy_login:
+                setSuccess();
                 mIsVercodeLogin = !mIsVercodeLogin;
                 switchLoginWay(mIsVercodeLogin);
                 break;
@@ -156,6 +161,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.vercode_delete:
                 mEditVercode.setText("");
+                break;
+            case R.id.image_back:
+                getActivity().onBackPressed();
                 break;
         }
     }
@@ -234,7 +242,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             if (mIsVercodeLogin) {
                 mActionLogin.setEnabled(true);
             } else {
-                if (StringUtils.isPasswordRegular(mEditPassword.getText().toString())) {
+                if (StringUtils.isPasswordRegular(mEditPassword.getText().toString()) && StringUtils.isPasswordComplex(mEditPassword.getText().toString())) {
                     mActionLogin.setEnabled(true);
                 } else {
                     mActionLogin.setEnabled(false);

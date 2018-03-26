@@ -12,8 +12,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.accountmanager.R;
+import com.android.accountmanager.model.AppInfoTemplate;
 import com.android.accountmanager.utils.AppUtils;
 import com.android.accountmanager.utils.FeedBackUtils;
 
@@ -22,7 +24,7 @@ import java.util.List;
 public class NormalProblemFragment extends Fragment {
     private static NormalProblemFragment mFragment;
     private GridView mGridView;
-    private List<ResolveInfo> mList;
+    private List<AppInfoTemplate> mList;
     private AppsAdapter mAdapter;
 
     @Override
@@ -30,7 +32,7 @@ public class NormalProblemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View parentView = inflater.inflate(R.layout.fragment_normalproblem, container, false);
         mGridView = (GridView) parentView.findViewById(R.id.griditem);
-        mList = FeedBackUtils.loadApps(getActivity());
+        mList = FeedBackUtils.loadModules(getActivity());
         mAdapter = new AppsAdapter();
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(mClick);
@@ -48,7 +50,7 @@ public class NormalProblemFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return mList.size() + 1;
+            return mList.size();
         }
 
         @Override
@@ -68,29 +70,26 @@ public class NormalProblemFragment extends Fragment {
             }
             ImageView imageView = FeedBackUtils.CommonViewHolder.get(view, R.id.item_imageview);
             TextView textView = FeedBackUtils.CommonViewHolder.get(view, R.id.item_textview);
-            if (i < mList.size()) {
-                ResolveInfo info = mList.get(i);
-                imageView.setImageDrawable(info.activityInfo.loadIcon(getActivity().getPackageManager()));
-                textView.setText(info.activityInfo.loadLabel(getActivity().getPackageManager()));
-            } else {
-                imageView.setImageDrawable(getActivity().getDrawable(R.drawable.ic_no_image));
-                textView.setText(R.string.third_party_application);
-            }
+
+            AppInfoTemplate info = mList.get(i);
+            imageView.setImageDrawable(info.getAppIcon());
+            textView.setText(info.getAppName());
             return view;
         }
     }
 
-   AdapterView.OnItemClickListener mClick = new AdapterView.OnItemClickListener() {
+    AdapterView.OnItemClickListener mClick = new AdapterView.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            if(!AppUtils.isLogined(getActivity())) {
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            if (!AppUtils.isLogined(getActivity())) {
+                ((MainActivity) getActivity()).showAction(R.string.feedback_need_login);
                 return;
             }
-            Intent intent = new Intent(getActivity(),IssueCommit.class);
-            String title = (String) mList.get(i).activityInfo.loadLabel(getActivity().getPackageManager());
-            String pkname = mList.get(i).activityInfo.packageName;
-            intent.putExtra("title",title);
-            intent.putExtra("package",pkname);
+            Intent intent = new Intent(getActivity(), IssueCommit.class);
+            String title = (String) mList.get(position).getAppName();
+            String pkname = mList.get(position).getPackageName();
+            intent.putExtra("title", title);
+            intent.putExtra("package", pkname);
             startActivity(intent);
         }
     };

@@ -11,6 +11,45 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/top_max_height"
+            android:background="@color/text_blue_color"
+            android:gravity="center_horizontal"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp">
+
+            <View
+                android:id="@+id/empty"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@+id/empty"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/image_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:src="@drawable/ic_back_selector" />
+
+                <TextView
+                    android:id="@+id/custom_actionbar_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/title_mailbox"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -29,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/icon_mailbox"
                 android:layout_marginTop="12dp"
+                android:maxLines="1"
                 android:text="xxxx@thinkgooo.com" />
 
             <TextView
@@ -36,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_mailbox"
                 android:layout_marginTop="4dp"
-                android:text="用于登录,重置,验证身份" />
+                android:text="@string/text_tile_verty" />
 
         </LinearLayout>
     </FrameLayout>
@@ -49,8 +89,11 @@
         android:text="@string/action_unbind" />
 
     <Button
+        android:background="@drawable/button_register_bg"
+        android:layout_marginBottom="36dp"
         android:id="@+id/action_change_mail"
         style="@style/stepButtonStyle"
+        android:textColor="@color/text_blue_color"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"

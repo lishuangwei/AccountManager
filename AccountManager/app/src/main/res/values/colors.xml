@@ -34,4 +34,5 @@
     <color name="user_header_summary_color">#777777</color>
     <drawable name="actionbar">#00000000</drawable>
     <color name="text_green">#22d47a</color>
+    <color name="text_feedback_normal">#c0c0c0</color>
 </resources>

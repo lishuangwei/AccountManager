@@ -98,17 +98,20 @@
 
         <LinearLayout
             style="@style/formStyle"
-            android:paddingStart="0dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:paddingEnd="0dp"
+            android:paddingStart="0dp">
 
             <LinearLayout
                 android:id="@+id/ly_vercode"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:paddingStart="12dp"
+                android:background="@drawable/edit_input_bg"
+                android:gravity="center"
                 android:paddingEnd="12dp"
-                android:gravity="center">
+                android:paddingStart="12dp">
 
                 <ImageView
                     android:id="@+id/img_vercode_label"
@@ -148,6 +151,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="55dp"
+            android:enabled="false"
             android:gravity="center"
             android:text="@string/action_next_step" />
 

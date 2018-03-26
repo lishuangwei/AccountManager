@@ -10,7 +10,7 @@ public class VercodeStateChangeEvent extends BaseEvent {
 
     private VercodeStateChangeEvent () {
         what = EVENT_VERCODE;
-        state = 60;
+        state = 5;
     }
 
     public final static VercodeStateChangeEvent newInstance() {

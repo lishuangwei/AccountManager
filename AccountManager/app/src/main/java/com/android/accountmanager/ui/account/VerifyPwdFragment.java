@@ -42,8 +42,8 @@ public class VerifyPwdFragment extends BaseDialogFragment implements View.OnClic
             case R.id.bt_ok:
                 if (!(getActivity() instanceof AccountContract.AccountView)) return;
                 AccountContract.AccountView accountView = (AccountContract.AccountView) getActivity();
-//                mListener.onVerifyComplete(accountView.verifyPassword(mEditName.getText().toString()));
-                if (!AppUtils.verifyPassword(getActivity(), mEditName.getText().toString())) {
+                mListener.onVerifyComplete(accountView.verifyPassword(mEditName.getText().toString()));
+                if (!accountView.verifyPassword(mEditName.getText().toString())) {
                     setError(getString(R.string.text_password_incorrect));
                 } else {
                     setSuccess();
@@ -122,13 +122,12 @@ public class VerifyPwdFragment extends BaseDialogFragment implements View.OnClic
         setSuccess();
     }
 
-    private void setError(String str) {
+    public void setError(String str) {
         mTextError.setVisibility(View.VISIBLE);
         mTextError.setText(str);
     }
 
     private void setSuccess() {
-        HandlerBus.getDefault().post(SignOutEvent.newInstance());
         mTextError.setVisibility(View.INVISIBLE);
         mTextError.setText("");
     }

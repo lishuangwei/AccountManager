@@ -86,8 +86,8 @@ public final class RegisterFragment extends BaseFragment implements View.OnClick
     }
 
     private void setSuccess() {
-        mLayoutPhone.setBackground(null);
-        mLayoutVercode.setBackground(null);
+        mLayoutPhone.setBackground(getImage(R.drawable.edit_input_bg));
+        mLayoutVercode.setBackground(getImage(R.drawable.edit_input_bg));
         mImgError.setVisibility(View.INVISIBLE);
         mTextEror.setVisibility(View.INVISIBLE);
         mTextEror.setText("");
@@ -179,6 +179,7 @@ public final class RegisterFragment extends BaseFragment implements View.OnClick
 
     @Override
     public void afterTextChanged(Editable editable) {
+        mActionNext.setEnabled((StringUtils.isNotEmpty(mEditPhoneNumber)));
 
     }
 }

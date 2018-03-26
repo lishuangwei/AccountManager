@@ -18,19 +18,21 @@ import android.widget.TextView;
 import com.android.accountmanager.R;
 import com.android.accountmanager.base.BaseFragment;
 import com.android.accountmanager.base.BaseView;
+import com.android.accountmanager.ui.account.AccountActivity;
 import com.android.accountmanager.ui.account.AccountContract;
 import com.android.accountmanager.ui.register.RegisterContract;
+import com.android.accountmanager.utils.AppUtils;
 import com.android.accountmanager.utils.StringUtils;
 
 /**
- * Created by fantao on 18-1-18.
+ * 注册设置密码,以及设置新密码界面
  */
 
 public class SetPwdFragment extends BaseFragment implements View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
     private TextInputEditText mEditPassword, mEditConfirmPassword;
     private View mActionConfirm, mFormatSizeIcon, mFormatSizeText, mFormatComplexIcon, mFormatComplexText;
     private ImageView mImgeback, mImgNewDelete, mImgConfirmDelete, mImgNewLabel, mImgCfmLabel;
-    private TextView mTextError;
+    private TextView mTextError, mTextTitle;
     private LinearLayout mConfirmLay;
 
     @Override
@@ -61,6 +63,13 @@ public class SetPwdFragment extends BaseFragment implements View.OnClickListener
         mFormatComplexIcon = parentView.findViewById(R.id.format_complex_icon);
         mFormatComplexText = parentView.findViewById(R.id.format_complex_text);
         mTextError = (TextView) parentView.findViewById(R.id.text_input_error);
+
+        int type = getArguments().getInt("type");
+        mTextTitle = (TextView) parentView.findViewById(R.id.title);
+        if (type == AppUtils.TYPE_LOGIN_PASSWORD) {
+            mTextTitle.setText(R.string.title_set_password);
+            mEditPassword.setHint(R.string.label_password);
+        }
         return parentView;
     }
 
@@ -73,7 +82,7 @@ public class SetPwdFragment extends BaseFragment implements View.OnClickListener
 
     private void setSuccess() {
         mTextError.setVisibility(View.INVISIBLE);
-        mConfirmLay.setBackground(null);
+        mConfirmLay.setBackground(getImage(R.drawable.edit_input_bg));
     }
 
     View.OnClickListener mClick = new View.OnClickListener() {
@@ -145,8 +154,8 @@ public class SetPwdFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         Log.d("test", "onTextChanged: " + charSequence);
-        boolean sizeOk = StringUtils.isPasswordRegular(charSequence.toString());
-        boolean complexOk = StringUtils.isPasswordComplex(charSequence.toString());
+        boolean sizeOk = StringUtils.isPasswordRegular(mEditPassword.getText().toString());
+        boolean complexOk = StringUtils.isPasswordComplex(mEditPassword.getText().toString());
         mFormatSizeIcon.setSelected(sizeOk);
         mFormatSizeText.setSelected(sizeOk);
         mFormatComplexIcon.setSelected(complexOk);
@@ -170,7 +179,7 @@ public class SetPwdFragment extends BaseFragment implements View.OnClickListener
                 if (!b) {
                     mImgNewDelete.setVisibility(View.INVISIBLE);
                 } else {
-                    mConfirmLay.setBackground(null);
+                    mConfirmLay.setBackground(getImage(R.drawable.edit_input_bg));
                 }
                 break;
             case R.id.et_confirm_password:

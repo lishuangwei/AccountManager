@@ -24,7 +24,6 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Method;
 
 /**
  * Created by fantao on 18-1-20.
@@ -179,7 +178,7 @@ public class BaseInfoFragment extends Fragment implements OnSharedPreferenceChan
                     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
                         if (getActivity() instanceof AccountContract.AccountView) {
                             ((AccountContract.AccountView) getActivity()).onBirthdayUpdate(StringUtils.formatTime(millseconds));
-                            Toast.makeText(getContext(), millseconds + "", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), millseconds + "", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -190,6 +189,11 @@ public class BaseInfoFragment extends Fragment implements OnSharedPreferenceChan
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.text_blue_color))
                 .setThemeColor(getResources().getColor(R.color.text_blue_color))
                 .setWheelItemTextSize(21)
+                .setCancelStringId(getString(android.R.string.cancel))
+                .setSureStringId(getString(android.R.string.ok))
+                .setYearText(getString(R.string.text_pick_birthday_year))
+                .setMonthText(getString(R.string.text_pick_birthday_month))
+                .setDayText(getString(R.string.text_pick_birthday_day))
                 .build();
         return dialog;
     }

@@ -1,25 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="19dp"
+    android:paddingLeft="28dp"
+    android:paddingRight="28dp"
+    android:paddingTop="19dp">
 
     <TextView
         android:id="@+id/mtname"
-        android:text="xianji"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="xianji"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/mtcontent"
-        android:text="youdiankadun"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="6dp"
+        android:text="shuang"
+        android:textColor="#2f2f2f"
+        android:textSize="@dimen/text_larger_size" />
 
-    <TextView
-        android:id="@+id/mtdate"
-        android:text="2018-7-5"
-        android:layout_gravity="end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/text_hadle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正在处理"
+            android:textColor="@color/text_blue_color"
+            android:textSize="@dimen/text_normal_size" />
+
+        <ImageView
+            android:id="@+id/image_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_normal_size"
+            android:src="@drawable/ic_has_processed" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/mtdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="2018-7-5"
+            android:textColor="#c0c0c0"
+            android:textSize="@dimen/text_normal_size" />
+
+    </LinearLayout>
+
 </LinearLayout>

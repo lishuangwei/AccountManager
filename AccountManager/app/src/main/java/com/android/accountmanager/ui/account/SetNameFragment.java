@@ -37,6 +37,7 @@ public class SetNameFragment extends BaseDialogFragment implements View.OnClickL
         mBtOk.setOnClickListener(this);
 
         mEditName.setText(summary);
+        mEditName.selectAll();
         mTile.setText(title);
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(getActivity(), R.style.UserInfoDialogStyle);

@@ -18,25 +18,22 @@ import com.android.accountmanager.base.BaseActivity;
 import com.android.accountmanager.ui.account.AccountActivity;
 import com.android.accountmanager.ui.account.SetNetworkFragment;
 import com.android.accountmanager.ui.common.SetPwdFragment;
+import com.android.accountmanager.ui.login.LoginActivity;
 import com.android.accountmanager.ui.main.MainActivity;
+import com.android.accountmanager.utils.AppUtils;
 
 public class RegisterActivity extends BaseActivity implements RegisterContract.RegisterView {
     private RegisterContract.RegisterPresenter mPresenter;
     private RegisterFragment mRegisterFragment;
     private Toast mToast;
     private String mUserName, mPassword, mVercode;
-    private SetPwdFragment mSetPassword;
 
     @Nullable
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        View decorView = getWindow().getDecorView();
-        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        decorView.setSystemUiVisibility(option);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        AppUtils.setNoActionbarTheme(this);
         mPresenter = new RegisterPresenter(this);
         mToast = Toast.makeText(this, "RegisterActivity", Toast.LENGTH_SHORT);
         mToast.setGravity(Gravity.CENTER, 0, 0);
@@ -85,8 +82,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.R
 
     @Override
     public void startMain() {
-        Intent intent = new Intent(this, AccountActivity.class);
-        startActivity(intent);
         finish();
     }
 
@@ -123,9 +118,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.R
 
     @Override
     public void nextStep(Fragment fragment) {
-        if(fragment instanceof  SetPwdFragment) {
-            mSetPassword = (SetPwdFragment) fragment;
-        }
+        Bundle args = new Bundle();
+        args.putInt("type", AppUtils.TYPE_LOGIN_PASSWORD);
+        fragment.setArguments(args);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fm_register, fragment);

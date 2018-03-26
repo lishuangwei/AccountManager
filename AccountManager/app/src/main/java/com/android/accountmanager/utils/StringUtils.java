@@ -76,11 +76,6 @@ public class StringUtils {
         return !TextUtils.isEmpty(str1) && !TextUtils.isEmpty(str2) && str1.equals(str2);
     }
 
-    public static String getPhoneNumber(String phonenumber) {
-        String tel = phonenumber.substring(0, 3) + "****" + phonenumber.substring(7, 11);
-        return tel;
-    }
-
     public static int getSexName(int type) {
         int sex = -1;
         if (type == 0) {

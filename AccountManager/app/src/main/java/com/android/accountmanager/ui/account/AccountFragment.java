@@ -69,11 +69,11 @@ public class AccountFragment extends BaseInfoFragment {
             String name = sharedPreferences.getString(UserInfoTemplate.KEY_ACCOUNT_NAME, "");
             String phoneNumber = sharedPreferences.getString(UserInfoTemplate.KEY_ACCOUNT_TEL, "");
             if (TextUtils.isEmpty(name)) {
-                actionItemView.setTitle(StringUtils.getPhoneNumber(phoneNumber));
+                actionItemView.setTitle(phoneNumber);
                 actionItemView.setSummary(getString(R.string.summary_name_empty));
             } else {
                 actionItemView.setTitle(name);
-                actionItemView.setSummary(StringUtils.getPhoneNumber(phoneNumber));
+                actionItemView.setSummary(phoneNumber);
             }
         }
     }
@@ -133,7 +133,7 @@ public class AccountFragment extends BaseInfoFragment {
             case R.id.action_sign_out:
                 Bundle args = new Bundle();
                 args.putString("title", getString(R.string.title_verify_password));
-                VerifyPwdFragment verifyPwdFragment = new VerifyPwdFragment();
+                final VerifyPwdFragment verifyPwdFragment = new VerifyPwdFragment();
                 verifyPwdFragment.setArguments(args);
                 verifyPwdFragment.setListener(new VerifyPwdFragment.Listener() {
                     @Override
@@ -143,7 +143,7 @@ public class AccountFragment extends BaseInfoFragment {
                         if (success) {
                             HandlerBus.getDefault().post(SignOutEvent.newInstance());
                         } else {
-                            accountView.showAction(R.string.toast_password_error);
+                           verifyPwdFragment.setError(getString(R.string.text_password_incorrect));
                         }
                     }
                 });

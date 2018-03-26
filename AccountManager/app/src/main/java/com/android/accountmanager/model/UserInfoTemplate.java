@@ -17,6 +17,7 @@ public class UserInfoTemplate implements Serializable {
     public static final String KEY_ACCOUNT_BIRTHDAY = "key_account_birthday";
     public static final String KEY_ACCOUNT_AREA = "key_account_area";
     public static final String KEY_ACCOUNT_TOKEN = "key_account_token";
+    public static final String KEY_ACCOUNT_PASSWORD = "key_account_password";
 
     private int atype = 0;
     private int sex = 0;

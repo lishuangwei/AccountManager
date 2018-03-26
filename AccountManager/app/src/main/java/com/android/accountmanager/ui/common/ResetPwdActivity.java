@@ -31,11 +31,7 @@ public class ResetPwdActivity extends BaseActivity implements ResetPwdContract.R
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
-        View decorView = getWindow().getDecorView();
-        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        decorView.setSystemUiVisibility(option);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        AppUtils.setNoActionbarTheme(this);
 
         mPresenter = new ResetPwdPresenter(this);
         mToast = Toast.makeText(this, "ResetPwdActivity", Toast.LENGTH_SHORT);
@@ -103,9 +99,8 @@ public class ResetPwdActivity extends BaseActivity implements ResetPwdContract.R
     @Override
     public void signOutEvent(SignOutEvent event) {
         Log.d("test", "signOutEvent: resetPwd");
-        AppUtils.clearCurrentAccount(this);
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        finish();
+
     }
 
 }

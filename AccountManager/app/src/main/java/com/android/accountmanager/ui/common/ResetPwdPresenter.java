@@ -63,13 +63,14 @@ public final class ResetPwdPresenter implements ResetPwdContract.ResetPasswordBa
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Log.d("test", "resetPassword: "+s);
+                        Log.d("test", "resetPassword: " + s);
                         ResultTemplate resultTemplate = JackSonUtil.json2Obj(s, ResultTemplate.class);
                         if (resultTemplate == null) {
                             mResetPasswordView.showAction(R.string.toast_unknown_error);
                         } else {
                             switch (resultTemplate.getResultCode()) {
                                 case ResultCode.RC_SUCCESS:
+                                    AppUtils.savePassword(mResetPasswordView.getContext(), AppUtils.encryptPassword(newPassword));
                                     HandlerBus.getDefault().post(SignOutEvent.newInstance());
                                     mResetPasswordView.showAction(R.string.toast_reset_password_success);
                                     break;
@@ -113,7 +114,7 @@ public final class ResetPwdPresenter implements ResetPwdContract.ResetPasswordBa
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Log.d("test", "sendVercode: "+s);
+                        Log.d("test", "sendVercode: " + s);
                         ResultTemplate resultTemplate = JackSonUtil.json2Obj(s, ResultTemplate.class);
                         if (resultTemplate == null) {
                             mResetPasswordView.showAction(R.string.toast_unknown_error);

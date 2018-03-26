@@ -12,13 +12,21 @@
         android:layout_marginBottom="@dimen/login_title_marginbottom"
         android:background="@drawable/ic_login_header_bg">
 
+        <ImageView
+            android:id="@+id/image_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_back_selector" />
+
         <TextView
             android:id="@+id/login_header_title"
             style="@style/LoginTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="账户系统" />
+            android:text="@string/text_login_title" />
     </RelativeLayout>
 
     <LinearLayout
@@ -77,9 +85,10 @@
 
         <LinearLayout
             android:id="@+id/password_layout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <ImageView
@@ -118,14 +127,20 @@
     <LinearLayout
         android:id="@+id/ly_vercode"
         style="@style/formStyle"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:background="@null"
         android:visibility="gone">
 
         <LinearLayout
+            android:background="@drawable/edit_input_bg"
             android:id="@+id/vercode_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView

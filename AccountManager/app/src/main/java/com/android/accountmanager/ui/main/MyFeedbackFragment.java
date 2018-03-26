@@ -1,28 +1,27 @@
 package com.android.accountmanager.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.accountmanager.R;
-import com.android.accountmanager.commom.HandlerBus;
-import com.android.accountmanager.commom.InternetHelper;
 import com.android.accountmanager.commom.RequestServer;
 import com.android.accountmanager.commom.ResultCode;
-import com.android.accountmanager.event.SignOutEvent;
 import com.android.accountmanager.model.FeedBackListTemplate;
-import com.android.accountmanager.model.ResultTemplate;
 import com.android.accountmanager.utils.AppUtils;
 import com.android.accountmanager.utils.FeedBackUtils;
 import com.android.accountmanager.utils.JackSonUtil;
@@ -37,13 +36,15 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class MyFeedbackFragment extends Fragment {
+public class MyFeedbackFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static MyFeedbackFragment mFragment;
     private ListView mListView;
     private List<FeedBackListTemplate.DataBean> mDate = new ArrayList<>();
     private CompositeSubscription mSubscriptions;
     private ProgressBar mProgress;
     private MyAdapter myAdapter;
+    private int mColor, mVisible, mPosition;
+    private TextView mText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +56,9 @@ public class MyFeedbackFragment extends Fragment {
         myAdapter = new MyAdapter();
         TextView empyty = (TextView) parentView.findViewById(R.id.feedback_empty);
         mListView.setEmptyView(empyty);
-
+        mListView.setOnItemClickListener(this);
+        mListView.setAdapter(myAdapter);
+        //initDate();
         return parentView;
     }
 
@@ -69,7 +72,6 @@ public class MyFeedbackFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initDate();
     }
 
     public void initDate() {
@@ -79,7 +81,7 @@ public class MyFeedbackFragment extends Fragment {
 
         Subscription subscription = rx.Observable.just("")
                 .subscribeOn(Schedulers.io())
-                .map(new Func1<String, String>() {
+                .map(  new Func1<String, String>() {
                     @Override
                     public String call(String s) {
                         return RequestServer.getInstance()
@@ -114,7 +116,32 @@ public class MyFeedbackFragment extends Fragment {
                     }
                 });
         mSubscriptions.add(subscription);
-        mListView.setAdapter(myAdapter);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mSubscriptions.clear();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        mPosition = i;
+        Bundle arg = new Bundle();
+        arg.putString("content", mDate.get(i).getMtcontent());
+        arg.putString("date", mDate.get(i).getMtdate());
+        Intent intent = new Intent(getActivity(), FeedbackDetailsActivity.class);
+        intent.putExtra("bundle", arg);
+        startActivityForResult(intent, FeedBackUtils.FEEDBACK_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        Log.d("test", "onActivityResult: MyFeedbackFragment" + requestCode + "----" + resultCode);
+        if (requestCode == FeedBackUtils.FEEDBACK_REQUEST) {
+            Log.d("test", "onActivityResult: MyFeedbackFragment1111");
+        }
     }
 
     class MyAdapter extends BaseAdapter {
@@ -141,6 +168,8 @@ public class MyFeedbackFragment extends Fragment {
             TextView name = FeedBackUtils.CommonViewHolder.get(view, R.id.mtname);
             TextView date = FeedBackUtils.CommonViewHolder.get(view, R.id.mtdate);
             TextView content = FeedBackUtils.CommonViewHolder.get(view, R.id.mtcontent);
+            TextView handle = FeedBackUtils.CommonViewHolder.get(view, R.id.text_hadle);
+            ImageView image = FeedBackUtils.CommonViewHolder.get(view, R.id.image_handle);
             name.setText(mDate.get(i).getMtname());
             date.setText(mDate.get(i).getMtdate());
             content.setText(mDate.get(i).getMtcontent());

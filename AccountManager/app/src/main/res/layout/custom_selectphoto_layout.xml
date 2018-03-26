@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:background="@color/white"
         android:id="@+id/take_photo"
         style="@style/SelectPhotoStyle"
         android:text="@string/item_take_photo" />
@@ -15,6 +16,7 @@
         android:background="#e5e5e5" />
 
     <TextView
+        android:background="@color/white"
         android:id="@+id/pick_photo"
         style="@style/SelectPhotoStyle"
         android:text="@string/item_pick_photo" />

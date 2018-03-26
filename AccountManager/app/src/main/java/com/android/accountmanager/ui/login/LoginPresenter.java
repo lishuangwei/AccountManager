@@ -71,12 +71,8 @@ public class LoginPresenter implements LoginContract.LoginPresenter {
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Log.d("test", "login: " + s);
-                        if (s.contains(ResultCode.RC_ACCOUNT_PASSWORD_ERR + "")) {
-                            mLoginView.showAction(R.string.toast_account_password_error);
-                            return;
-                        }
-
+                        Log.d("test", "call: login" + s);
+                        if (AppUtils.showErrorWithResult(s, mLoginView)) return;
                         LoginTemplate resultTemplate = JackSonUtil.json2Obj(s, LoginTemplate.class);
                         if (resultTemplate == null) {
                             mLoginView.showAction(R.string.toast_unknown_error);
@@ -84,6 +80,7 @@ public class LoginPresenter implements LoginContract.LoginPresenter {
                             switch (resultTemplate.getResultCode()) {
                                 case ResultCode.RC_SUCCESS:
                                     AppUtils.saveUserinfo(mLoginView.getContext(), resultTemplate);
+                                    AppUtils.savePassword(mLoginView.getContext(), password);
                                     mLoginView.showAction(R.string.toast_login_success);
                                     mLoginView.startMain();
                                     break;

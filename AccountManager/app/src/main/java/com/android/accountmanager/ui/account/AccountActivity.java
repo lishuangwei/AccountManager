@@ -2,20 +2,15 @@ package com.android.accountmanager.ui.account;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.accountmanager.R;
@@ -25,7 +20,6 @@ import com.android.accountmanager.event.SignOutEvent;
 import com.android.accountmanager.model.UserInfoTemplate;
 import com.android.accountmanager.ui.common.ResetPwdActivity;
 import com.android.accountmanager.ui.login.LoginActivity;
-import com.android.accountmanager.ui.main.MainActivity;
 import com.android.accountmanager.utils.AppUtils;
 
 public class AccountActivity extends BaseActivity implements AccountContract.AccountView {
@@ -43,13 +37,7 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-
-        View decorView = getWindow().getDecorView();
-        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        decorView.setSystemUiVisibility(option);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-
+        AppUtils.setNoActionbarTheme(this);
         mToast = Toast.makeText(this, "LoginActivity", Toast.LENGTH_SHORT);
         mToast.setGravity(Gravity.CENTER, 0, 0);
         mPresenter = new AccountPresenter(this);
@@ -66,6 +54,7 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.commitAllowingStateLoss();
         }
+
     }
 
     @Override
@@ -79,7 +68,7 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
 
     @Override
     public void signOutEvent(SignOutEvent event) {
-        super.signOutEvent(event);
+        AppUtils.clearCurrentAccount(this);
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -109,8 +98,13 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onStartFragment(String fragmentClass, Bundle args) {
-        Log.d("test", "onStartFragment: startactivity-----"+fragmentClass);
+        Log.d("test", "onStartFragment: startactivity-----" + fragmentClass);
         if ("com.android.accountmanager.ui.account.EmailFragment".equals(fragmentClass)
                 && TextUtils.isEmpty(AppUtils.getAccountSharedPreferences(this)
                 .getString(UserInfoTemplate.KEY_ACCOUNT_EMAIL, null))) {
@@ -175,14 +169,17 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
             verifyPwdFragment.show(getSupportFragmentManager(),
                     getString(R.string.title_verify_password));
             return;
+        } else if ("com.android.accountmanager.ui.account.BindEmailFragment".equals(fragmentClass)) { //add by lsw
+            if (AppUtils.isBindEmail(this)) {
+                startActivity(buildStartFragmentIntent(
+                        "com.android.accountmanager.ui.account.EmailFragment", args));
+            } else {
+                startActivity(buildStartFragmentIntent(fragmentClass, args));
+            }
+            return;
         }
-        Log.d("test", "onStartFragment: startactivity"+fragmentClass);
+        Log.d("test", "onStartFragment: startactivity" + fragmentClass);
         startActivity(buildStartFragmentIntent(fragmentClass, args));
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
     }
 
     @Override
@@ -211,8 +208,8 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
     }
 
     @Override
-    public void bindMailbox(String mailbox) {
-        mPresenter.bindMailbox(mailbox);
+    public void bindMailbox(String mailbox, String vercode) {
+        mPresenter.bindMailbox(mailbox, vercode);
     }
 
     @Override
@@ -237,8 +234,8 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
     }
 
     @Override
-    public void login(String loginType, String name, String password, boolean isEmail) {
-        mPresenter.login(loginType, name, password, isEmail);
+    public void login(String loginType, String name, String password, int type) {
+        mPresenter.login(loginType, name, password, type);
     }
 
     @Override
@@ -249,13 +246,11 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
             fragmentArgs.putString("title", getString(R.string.title_set_new_password));
             fragmentArgs.putString("type", RequestUri.TYPE_TEL);
             fragmentArgs.putString("identifier", getModifyName());
-            startActivity(buildStartFragmentIntent(
-                    "com.android.accountmanager.ui.common.SetPwdFragment", fragmentArgs));
+            startFragmentNew("com.android.accountmanager.ui.common.SetPwdFragment", fragmentArgs);
         } else {
             Bundle fragmentArgs = new Bundle();
             fragmentArgs.putString("title", getString(R.string.title_bind_mailbox));
-            startActivity(buildStartFragmentIntent(
-                    "com.android.accountmanager.ui.account.EmailFragment$EmailBindFragment", fragmentArgs));
+            startFragmentNew("com.android.accountmanager.ui.account.EmailFragment$EmailBindFragment", fragmentArgs);
         }
     }
 
@@ -278,7 +273,11 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
     @Override
     public void setModifyPassWord(String passWord) {
         this.mPassword = passWord;
+    }
 
+    @Override
+    public void startMain() {
+        finish();
     }
 
     @Override
@@ -313,9 +312,10 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
     private void startFragment(String fragmentClass, Bundle args) {
         Fragment f = Fragment.instantiate(this, fragmentClass, args);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, f);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.addToBackStack(BACK_STACK);
+        transaction.replace(R.id.fragment, f);
+//        transaction.addToBackStack(BACK_STACK);
+        Log.d("shuang", "startFragment: BACK_STACK");
         transaction.commitAllowingStateLoss();
     }
 
@@ -325,5 +325,16 @@ public class AccountActivity extends BaseActivity implements AccountContract.Acc
         intent.putExtra(EXTRA_SHOW_FRAGMENT, fragmentClass);
         intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, args);
         return intent;
+    }
+
+    @Override
+    public void startFragmentNew(String fragmentClass, Bundle args) {
+        Fragment f = Fragment.instantiate(this, fragmentClass, args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.fragment_slide_right_in, R.anim.fragment_slide_left_out, R.anim.fragment_slide_left_in, R.anim.fragment_slide_right_out);
+        transaction.replace(R.id.fragment, f);
+        transaction.addToBackStack(BACK_STACK);
+        Log.d("shuang", "startFragment: BACK_STACK");
+        transaction.commitAllowingStateLoss();
     }
 }

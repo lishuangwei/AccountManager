@@ -12,6 +12,7 @@ public interface ResultCode {
     int RC_USER_EXIST = 20003;//用户已存在
     int RC_CODE_ERR = 20004;//验证码错误
     int RC_INVALID_PARAM = 30001;//无效参数
+    int RC_EMAIL_NOT_EXIST = 40001;//邮箱不存在
 
     int RETCODE_PASSWOER_ERR = 0x11;//密码错误
     int RETCODE_USER_NON_EXIST = 0x12;//用户不存在

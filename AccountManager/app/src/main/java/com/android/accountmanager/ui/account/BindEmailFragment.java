@@ -90,15 +90,16 @@ public class BindEmailFragment extends BaseFragment implements View.OnClickListe
         AccountContract.AccountView accountView = (AccountContract.AccountView) getActivity();
         String password = mEditPassword.getText().toString();
         String name = mEditName.getText().toString();
+        String loginaccount = AppUtils.isLogined(getActivity()) ? mTextCurrentTel.getText().toString() : name;
         switch (view.getId()) {
             case R.id.action_forget_pwd:
                 accountView.startForgetPassword();
                 break;
             case R.id.action_next:
                 Log.d("test", "onClick:login next ");
-                accountView.setModifyName(name);
+                accountView.setModifyName(loginaccount);
                 accountView.setModifyPassWord(password);
-                accountView.login(RequestUri.TYPE_PASSWORD, name, password, true);
+                accountView.login(RequestUri.TYPE_PASSWORD, loginaccount, password, AppUtils.TYPE_BIND_EMAIL);
                 break;
         }
     }

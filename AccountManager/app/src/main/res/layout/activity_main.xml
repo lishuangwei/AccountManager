@@ -1,23 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:layout_height="@dimen/top_max_height"
+        android:background="@color/text_blue_color"
+        android:gravity="center_horizontal"
+        android:paddingEnd="16dp"
+        android:paddingStart="20dp">
+
+        <View
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@+id/empty"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/ic_account_unlogin" />
+
+            <TextView
+                android:id="@+id/custom_actionbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/text_feedback_center_title"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/radiogroup"
-        android:layout_below="@id/toolbar" />
+        android:layout_marginTop="80dp" />
 
     <RadioGroup
         android:id="@+id/radiogroup"
@@ -25,7 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
 
         <RadioButton
             android:id="@+id/page_normalproblem"
@@ -34,9 +68,10 @@
             android:layout_weight="1"
             android:button="@null"
             android:checked="true"
-            android:drawableTop="@android:drawable/btn_star"
+            android:drawableTop="@drawable/normal_problem_selector"
             android:gravity="center"
-            android:text="@string/page_normal_problem" />
+            android:text="@string/page_normal_problem"
+            android:textColor="@drawable/feedback_text_color_selector" />
 
         <RadioButton
             android:id="@+id/page_myfeedback"
@@ -44,9 +79,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:button="@null"
-            android:drawableTop="@android:drawable/btn_star"
+            android:drawableTop="@drawable/my_feedback_selector"
             android:gravity="center"
-            android:text="@string/page_my_feedback" />
+            android:text="@string/page_my_feedback"
+            android:textColor="@drawable/feedback_text_color_selector" />
 
     </RadioGroup>
 

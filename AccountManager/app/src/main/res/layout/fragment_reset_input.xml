@@ -30,7 +30,6 @@
                 android:id="@+id/image_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:src="@drawable/ic_back_selector" />
 
             <TextView
@@ -59,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center"
-        android:text="@string/text_currrent_accoutn"
+        android:text="@string/text_unknow_account"
         android:textColor="@color/black"
         android:textSize="22sp" />
 
@@ -97,6 +96,13 @@
             android:hint="@string/text_login_password_hint"
             android:inputType="textPassword"
             android:maxLength="16" />
+
+        <ImageView
+            android:id="@+id/img_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete"
+            android:visibility="invisible" />
 
         <ToggleButton
             android:id="@+id/sw_show_password"

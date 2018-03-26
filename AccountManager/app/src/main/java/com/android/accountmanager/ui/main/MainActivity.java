@@ -1,47 +1,67 @@
 package com.android.accountmanager.ui.main;
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.android.accountmanager.R;
+import com.android.accountmanager.base.BaseView;
+import com.android.accountmanager.model.UserInfoTemplate;
 import com.android.accountmanager.ui.account.AccountActivity;
+import com.android.accountmanager.ui.account.PhotoSelectionHandler;
+import com.android.accountmanager.ui.account.SetNetworkFragment;
 import com.android.accountmanager.ui.login.LoginActivity;
 import com.android.accountmanager.utils.AppUtils;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, ViewPager.OnPageChangeListener, BaseView {
     private ViewPager mViewPage;
     private ArrayList<Fragment> mList;
     private MyFragmentAdapter mAdapter;
     private RadioGroup mRadioGroup;
     private RadioButton mProblemRadio, mFeedBackRadio;
+    private Toast mToast;
+    private Button mBtCancel, mBtOk;
+    private AlertDialog mDialog;
+    private ImageView mImgIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("shuang", "onCreate: MainActivity");
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        AppUtils.setNoActionbarTheme(this);
         init();
     }
 
     private void init() {
+        mToast = Toast.makeText(this, "MainActivity", Toast.LENGTH_SHORT);
+        mToast.setGravity(Gravity.CENTER, 0, 0);
         mViewPage = (ViewPager) findViewById(R.id.viewpage);
         mList = new ArrayList<Fragment>();
         Fragment f1 = NormalProblemFragment.newInstance();
@@ -60,71 +80,96 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         mViewPage.setAdapter(mAdapter);
         mViewPage.setOnPageChangeListener(this);
         mViewPage.setCurrentItem(0);
+
+        mImgIcon = (ImageView) findViewById(R.id.image_icon);
+        mImgIcon.setOnClickListener(mClick);
+        mImgIcon.setImageDrawable(getDrawable(R.drawable.ic_account_unlogin));
+        updateIcon(this, mImgIcon);
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    private void updateIcon(Context context, ImageView imageView) {
+        if (AppUtils.isLogined(context)) {
+            String uriStr = getSharedPreferences("current_account", Context.MODE_PRIVATE).getString(UserInfoTemplate.KEY_ACCOUNT_ICON, null);
+            Drawable drawable = null;
+            if (!TextUtils.isEmpty(uriStr)) {
+                try {
+                    drawable = PhotoSelectionHandler
+                            .getRoundDrawableFromUri(this, Uri.parse(uriStr));
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        boolean isLogin = AppUtils.isLogined(this);
-        Log.d("test", "onPrepareOptionsMenu===================: " + isLogin);
-        menu.findItem(R.id.action_account).setIcon(isLogin ? R.drawable.ic_account_login : R.drawable.ic_account_unlogin);
-        return super.onPrepareOptionsMenu(menu);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            imageView.setImageDrawable(drawable == null ? getDrawable(R.drawable.ic_account_login) : drawable);
+        }
+        Log.d("shuang", "updateIcon: MainActivity -----" + AppUtils.isLogined(this));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
+                .inflate(R.layout.custom_feedback_layout, null);
+        mBtCancel = (Button) layout.findViewById(R.id.bt_cancel);
+        mBtCancel.setOnClickListener(mClick);
+        mBtOk = (Button) layout.findViewById(R.id.bt_setting);
+        mBtOk.setOnClickListener(mClick);
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this, R.style.NetWorkDialogStyle);
+        builder.setCancelable(false);
+        builder.setView(layout);
+        mDialog = builder.create();
         if (!AppUtils.isLogined(this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(null);
-            builder.setMessage(R.string.feedback_need_login);
-            builder.setCancelable(true);
-            builder.setPositiveButton(R.string.feedback_login,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-            builder.setNegativeButton(android.R.string.cancel,
-                    null);
-            builder.create().show();
+            mDialog.show();
+            Window window = mDialog.getWindow();
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.gravity = Gravity.BOTTOM;
+            window.getDecorView().setPadding(0, 0, 0, 0);
+            params.width = WindowManager.LayoutParams.MATCH_PARENT;
+            window.setAttributes(params);
+
         }
     }
+
+    View.OnClickListener mClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.bt_cancel:
+                    mDialog.dismiss();
+                    break;
+                case R.id.bt_setting:
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.image_icon:
+                    Intent intent1 = null;
+                    if (AppUtils.isLogined(MainActivity.this)) {
+                        intent1 = new Intent(MainActivity.this, AccountActivity.class);
+                    } else {
+                        intent1 = new Intent(MainActivity.this, LoginActivity.class);
+                    }
+                    startActivity(intent1);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
         super.onResume();
-        invalidateOptionsMenu();
+        Log.d("shuang", "onResume: MainActivity");
+        updateIcon(this, mImgIcon);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                break;
-            case R.id.action_account:
-                Intent intent = null;
-                if (AppUtils.isLogined(this)) {
-                    intent = new Intent(MainActivity.this, AccountActivity.class);
-                } else {
-                    intent = new Intent(MainActivity.this, LoginActivity.class);
-                }
-                startActivity(intent);
-                break;
+    protected void onStop() {
+        super.onStop();
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -150,8 +195,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (!AppUtils.isLogined(this)) {
-            Toast.makeText(this, R.string.feedback_need_login, Toast.LENGTH_SHORT).show();
-            mProblemRadio.setChecked(true);
+            showAction(R.string.feedback_need_login);
             return;
         }
         switch (i) {
@@ -162,6 +206,42 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 mViewPage.setCurrentItem(1);
                 break;
         }
+
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void showAction(CharSequence actionString) {
+        mToast.setText(actionString);
+        mToast.show();
+
+    }
+
+    @Override
+    public void showAction(int strId) {
+        mToast.setText(strId);
+        mToast.show();
+
+    }
+
+    @Override
+    public void sendVercode(String type, String phoneNumber) {
+
+    }
+
+    @Override
+    public boolean verifyCode(String type, String phoneNumber, String vercode) {
+        return false;
+    }
+
+    @Override
+    public void networkAnomaly() {
+        SetNetworkFragment fragment = new SetNetworkFragment();
+        fragment.show(getSupportFragmentManager(), getClass().toString());
 
     }
 
@@ -188,4 +268,5 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
 
     }
+
 }

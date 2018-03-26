@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:paddingBottom="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/feedback_need_login"
+        android:textColor="#000000"
+        android:textSize="17.3sp" />
+
+    <TextView
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="@string/network_check"
+        android:textColor="@color/dialog_content_text_color"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44.7dp"
+        android:layout_marginTop="45dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_cancel"
+            android:layout_width="151dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_register_bg"
+            android:text="@android:string/cancel"
+            android:textColor="@color/text_blue_color" />
+
+        <Button
+            android:id="@+id/bt_setting"
+            android:layout_width="151dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/button_login_bg"
+            android:text="@string/feedback_login"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

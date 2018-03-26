@@ -68,14 +68,14 @@ public class LoginTemplate implements Serializable {
              * tel : 13912430710
              */
 
-            private String account;
+            private String account;//add by john,  这个才是账号id
             private String area;
             private int atype;
             private String birthday;
             private String email;
             private String fullname;
             private String icon;
-            private String id;
+            private String id;//add by john,  这个ID 没用
             private String imei;
             private int sex;
             private String tel;

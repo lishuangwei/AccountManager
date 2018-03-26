@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_max_height"
+        android:background="@color/text_blue_color"
+        android:gravity="center_horizontal"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
+
+        <View
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@+id/empty"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_back_selector" />
+
+            <TextView
+                android:id="@+id/custom_actionbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/feedback_details_tile"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="38dp">
+
+        <TextView
+            android:id="@+id/text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="6dp"
+            android:text="第一次进入系统太卡顿了，非常不爽，玩王者荣耀不能赢是为什么"
+            android:textColor="#2f2f2f"
+            android:textSize="@dimen/text_larger_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/feedback_question_label"
+            android:textColor="#777777"
+            android:textSize="@dimen/text_larger_size" />
+
+        <TextView
+            android:id="@+id/text_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="16dp"
+            android:lineSpacingExtra="6dp"
+            android:text="感谢您的支持与关注,我们会认真处理您的反馈,尽快恢复和完善相关功能"
+            android:textColor="#2f2f2f"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:text="2018-7-5"
+            android:textColor="#c0c0c0"
+            android:textSize="@dimen/text_normal_size" />
+
+    </LinearLayout>
+
+</LinearLayout>

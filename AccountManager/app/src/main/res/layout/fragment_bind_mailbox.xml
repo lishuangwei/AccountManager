@@ -46,6 +46,7 @@
 
     <LinearLayout
         style="@style/formStyle"
+        android:background="@null"
         android:layout_height="32.7dp"
         android:gravity="center">
 
@@ -67,6 +68,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ly_email"
         style="@style/formStyle"
         android:layout_marginTop="20dp">
 
@@ -92,9 +94,17 @@
 
     <View style="@style/dividerStyle" />
 
-    <LinearLayout style="@style/formStyle">
+    <LinearLayout style="@style/formStyle"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:background="@null"
+        >
 
         <LinearLayout
+            android:id="@+id/ly_vercode"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@drawable/edit_input_bg"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -126,8 +136,6 @@
             android:layout_height="match_parent"
             android:background="@drawable/action_bt_bg"
             android:gravity="center"
-            android:maxLength="8"
-            android:padding="4dp"
             android:singleLine="true"
             android:text="@string/action_send_vercode"
             android:textColor="@color/white"

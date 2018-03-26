@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="feeedback_label">
+        <item>系统应用</item>
+        <item>Google应用 </item>
+        <item>其他应用</item>
+        <item>性能</item>
+        <item>闪退</item>
+        <item>死机</item>
+        <item>重启</item>
+        <item>键盘</item>
+        <item>相机</item>
+        <item>音频</item>
+        <item>指纹解锁</item>
+        <item>网络信号</item>
+    </string-array>
+</resources>

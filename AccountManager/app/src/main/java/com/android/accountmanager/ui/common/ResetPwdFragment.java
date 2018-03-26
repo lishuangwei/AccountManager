@@ -1,5 +1,6 @@
 package com.android.accountmanager.ui.common;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -15,6 +16,7 @@ import com.android.accountmanager.R;
 import com.android.accountmanager.commom.RequestUri;
 import com.android.accountmanager.model.LoginTemplate;
 import com.android.accountmanager.model.UserInfoTemplate;
+import com.android.accountmanager.ui.account.AccountPresenter;
 import com.android.accountmanager.ui.account.BaseInfoFragment;
 import com.android.accountmanager.utils.AppUtils;
 import com.android.accountmanager.utils.StringUtils;
@@ -23,15 +25,16 @@ import com.android.accountmanager.utils.StringUtils;
  * Created by fantao on 18-1-24.
  */
 
-public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher {
+public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher, View.OnFocusChangeListener {
     private TextInputEditText mEditPhoneNumber, mEditMailbox, mEditVercode;
     private View mLyPhoneNumber, mLyMailbox;
     private TextView mActionVerifyWay, mActionSendVercode;
     private View mActionNext;
 
     private boolean mIsVerifyMailbox;
-    private TextView mTextCurrentTel;
-    private ImageView mVercodeDelete,mImgBack;
+    private TextView mTextCurrentTel, mTextCurrentTellabel;
+    private ImageView mVercodeDelete, mImgBack, mPhoneDelete, mImgPhoneicon, mImgVercodeIcon;
+    private boolean isLogined;
 
     @Nullable
     @Override
@@ -39,13 +42,18 @@ public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher {
         View parentView = inflater.inflate(R.layout.fragment_reset_password, null);
         LoginTemplate.DataBean.UserinfoBean info = AppUtils.getCurrentAccount(getActivity());
         mEditPhoneNumber = (TextInputEditText) parentView.findViewById(R.id.et_login_name);
+        mEditPhoneNumber.addTextChangedListener(this);
+        mEditPhoneNumber.setOnFocusChangeListener(this);
         mEditMailbox = (TextInputEditText) parentView.findViewById(R.id.et_mailbox);
         mTextCurrentTel = (TextView) parentView.findViewById(R.id.text_current_tel);
+        mTextCurrentTellabel = (TextView) parentView.findViewById(R.id.text_current_tel_label);
         if (AppUtils.isLogined(getActivity())) {
             mTextCurrentTel.setText(info.getTel());
             mTextCurrentTel.setEnabled(false);
         }
         mEditVercode = (TextInputEditText) parentView.findViewById(R.id.et_vercode);
+        mEditVercode.setOnFocusChangeListener(this);
+        mEditVercode.addTextChangedListener(this);
         mLyPhoneNumber = parentView.findViewById(R.id.ly_phone_number);
         mLyMailbox = parentView.findViewById(R.id.ly_mailbox);
         mActionVerifyWay = (TextView) parentView.findViewById(R.id.wy_verify);
@@ -56,9 +64,31 @@ public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher {
         mActionNext.setOnClickListener(this);
         mVercodeDelete = (ImageView) parentView.findViewById(R.id.vercode_delete);
         mVercodeDelete.setOnClickListener(this);
+        mPhoneDelete = (ImageView) parentView.findViewById(R.id.phone_delete);
+        mPhoneDelete.setOnClickListener(this);
         mImgBack = (ImageView) parentView.findViewById(R.id.image_back);
         mImgBack.setOnClickListener(this);
+        mImgPhoneicon = (ImageView) parentView.findViewById(R.id.img_phone_icon);
+        mImgVercodeIcon = (ImageView) parentView.findViewById(R.id.img_vercode_icon);
         return parentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (AppUtils.isLogined(getActivity())) {
+            isLogined = true;
+            mTextCurrentTel.setVisibility(View.VISIBLE);
+            mTextCurrentTellabel.setVisibility(View.VISIBLE);
+            mLyPhoneNumber.setVisibility(View.GONE);
+            mEditVercode.requestFocus();
+        } else {
+            isLogined = false;
+            mTextCurrentTel.setVisibility(View.GONE);
+            mTextCurrentTellabel.setVisibility(View.GONE);
+            mLyPhoneNumber.setVisibility(View.VISIBLE);
+            mEditPhoneNumber.requestFocus();
+        }
     }
 
     @Override
@@ -67,6 +97,7 @@ public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher {
         ResetPwdContract.ResetPasswordView resetPasswordView = (ResetPwdContract.ResetPasswordView) getActivity();
         String phoneNumber = mEditPhoneNumber.getText().toString();
         String mailbox = mEditMailbox.getText().toString();
+        String realname = AppUtils.isLogined(getActivity()) ? mTextCurrentTel.getText().toString() : phoneNumber;
         switch (view.getId()) {
             case R.id.send_vercode:
                 if (mIsVerifyMailbox) {
@@ -106,8 +137,9 @@ public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher {
                 }
                 SetPwdFragment setPwdFragment = new SetPwdFragment();
                 Bundle args = new Bundle();
+                args.putInt("type", AppUtils.TYPE_RESET_PASSWORD);
                 args.putString("type", mIsVerifyMailbox ? RequestUri.TYPE_EMAIL : RequestUri.TYPE_TEL);
-                args.putString("identifier", mIsVerifyMailbox ? mailbox : phoneNumber);
+                args.putString("identifier", mIsVerifyMailbox ? mailbox : realname);
                 args.putString("vercode", vercode);
                 setPwdFragment.setArguments(args);
                 resetPasswordView.nextStep(setPwdFragment);
@@ -122,6 +154,9 @@ public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher {
             case R.id.vercode_delete:
                 mEditVercode.setText("");
                 break;
+            case R.id.phone_delete:
+                mEditPhoneNumber.setText("");
+                break;
             case R.id.image_back:
                 getActivity().onBackPressed();
                 break;
@@ -135,11 +170,37 @@ public class ResetPwdFragment extends BaseInfoFragment implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        mVercodeDelete.setVisibility(StringUtils.isNotEmpty(mEditVercode) ? View.VISIBLE : View.INVISIBLE);
+        if (mEditPhoneNumber.hasFocus())
+            mPhoneDelete.setVisibility(StringUtils.isNotEmpty(mEditPhoneNumber) ? View.VISIBLE : View.INVISIBLE);
+        if (mEditVercode.hasFocus())
+            mVercodeDelete.setVisibility(StringUtils.isNotEmpty(mEditVercode) ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
+        mActionNext.setEnabled(isLogined ? StringUtils.isNotEmpty(mEditVercode) : StringUtils.isNotEmpty(mEditPhoneNumber));
 
+    }
+
+    private Drawable getImage(int resid) {
+        return getActivity().getDrawable(resid);
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        switch (view.getId()) {
+            case R.id.et_login_name:
+                mImgPhoneicon.setImageDrawable(b ? getImage(R.drawable.ic_label_phonenumber_pressed) : getImage(R.drawable.ic_label_phonenumber));
+                if (!b) {
+                    mPhoneDelete.setVisibility(View.INVISIBLE);
+                }
+                break;
+            case R.id.et_vercode:
+                mImgVercodeIcon.setImageDrawable(b ? getImage(R.drawable.ic_label_vercode_pressed) : getImage(R.drawable.ic_label_vercode));
+                if (!b) {
+                    mVercodeDelete.setVisibility(View.INVISIBLE);
+                }
+                break;
+        }
     }
 }

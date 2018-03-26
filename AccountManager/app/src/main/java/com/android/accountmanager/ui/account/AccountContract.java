@@ -28,7 +28,7 @@ public class AccountContract {
 
         void bindPhoneNumber(String phoneNumber, String code);
 
-        void bindMailbox(String mailbox);
+        void bindMailbox(String mailbox, String vercode);   //add by john, 添加验证码参数;
 
         void unBindMailbox();
 
@@ -38,7 +38,7 @@ public class AccountContract {
 
         void startForgetPassword();
 
-        void login(String loginType, String name, String password, boolean isEmail);
+        void login(String loginType, String name, String password, int type);
 
         void nextStep(boolean isEmail);
 
@@ -50,6 +50,9 @@ public class AccountContract {
 
         void setModifyPassWord(String passWord);
 
+        void startMain();
+
+        void startFragmentNew(String fragmentClass, Bundle args);
     }
 
     public interface AccountPresenter extends BasePresenter {
@@ -65,7 +68,7 @@ public class AccountContract {
 
         void bindPhoneNumber(String phoneNumber, String code);
 
-        void bindMailbox(String mailbox);
+        void bindMailbox(String mailbox, String vercode);  //add by john, 添加验证码参数
 
         void unBindMailbox();
 
@@ -73,6 +76,6 @@ public class AccountContract {
 
         void getAccount(String type);
 
-        void login(String loginType, String name, String password, boolean isEmail);
+        void login(String loginType, String name, String password, int type);
     }
 }

@@ -36,6 +36,7 @@ public class ModifyPasswordFragment extends BaseFragment implements View.OnClick
     private TextView mForgetPassword;
     private ImageView mImageback;
     private TextView mTextCurrentTel;
+    private ImageView mImgDelete;
 
     @Nullable
     @Override
@@ -60,7 +61,9 @@ public class ModifyPasswordFragment extends BaseFragment implements View.OnClick
             }
         });
         mImageback = (ImageView) parentView.findViewById(R.id.image_back);
-        mImageback.setOnClickListener(mClick);
+        mImageback.setOnClickListener(this);
+        mImgDelete = (ImageView) parentView.findViewById(R.id.img_delete);
+        mImgDelete.setOnClickListener(this);
         mTextCurrentTel = (TextView) parentView.findViewById(R.id.text_current_tel);
         LoginTemplate.DataBean.UserinfoBean info = AppUtils.getCurrentAccount(getActivity());
         if (AppUtils.isLogined(getActivity())) {
@@ -69,17 +72,6 @@ public class ModifyPasswordFragment extends BaseFragment implements View.OnClick
         }
         return parentView;
     }
-
-    View.OnClickListener mClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.image_back:
-                    getActivity().onBackPressed();
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onAttach(Context context) {
@@ -96,19 +88,35 @@ public class ModifyPasswordFragment extends BaseFragment implements View.OnClick
         if (!(getActivity() instanceof AccountContract.AccountView)) {
             return;
         }
+        int flag = getArguments().getInt("flag");
         AccountContract.AccountView accountView = (AccountContract.AccountView) getActivity();
         String password = mEditPassword.getText().toString();
         String name = mEditName.getText().toString();
+        String realname = AppUtils.isLogined(getActivity()) ? mTextCurrentTel.getText().toString() : name;
         switch (view.getId()) {
             case R.id.action_forget_pwd:
                 accountView.startForgetPassword();
                 break;
             case R.id.action_next:
-                Log.d("test", "onClick:login next ");
                 accountView.setModifyName(mTextCurrentTel.getText().toString());
                 accountView.setModifyPassWord(password);
-                accountView.login(RequestUri.TYPE_PASSWORD, name, password, false);
+                if (flag == AppUtils.TYPE_UNBIND_EMAIL) {
+                    Log.d("test", "onClick:login next  TYPE_UNBIND_EMAIL ---");
+                    accountView.login(RequestUri.TYPE_PASSWORD, realname, password, AppUtils.TYPE_UNBIND_EMAIL);
+                } else if (flag == AppUtils.TYPE_CHANGE_PHONE) {
+                    accountView.login(RequestUri.TYPE_PASSWORD, realname, password, AppUtils.TYPE_CHANGE_PHONE);
+                } else {
+                    Log.d("test", "onClick:login next  TYPE_MDDIFY_PASSWORD ---");
+                    accountView.login(RequestUri.TYPE_PASSWORD, realname, password, AppUtils.TYPE_MDDIFY_PASSWORD);
+                }
                 break;
+            case R.id.image_back:
+                getActivity().onBackPressed();
+                break;
+            case R.id.img_delete:
+                mEditPassword.setText("");
+                break;
+
         }
     }
 
@@ -121,6 +129,8 @@ public class ModifyPasswordFragment extends BaseFragment implements View.OnClick
         boolean sizeOk = StringUtils.isPasswordRegular(charSequence.toString());
         boolean complexOk = StringUtils.isPasswordComplex(charSequence.toString());
         mNextStep.setEnabled(sizeOk & complexOk);
+        if (mEditPassword.hasFocus())
+            mImgDelete.setVisibility(StringUtils.isNotEmpty(mEditPassword) ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

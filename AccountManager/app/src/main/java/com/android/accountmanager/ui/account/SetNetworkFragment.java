@@ -29,7 +29,7 @@ public class SetNetworkFragment extends BaseDialogFragment implements View.OnCli
         mBtSetting.setOnClickListener(this);
 
         AlertDialog.Builder builder =
-                new AlertDialog.Builder(getActivity(), R.style.BottomDialog);
+                new AlertDialog.Builder(getActivity(), R.style.NetWorkDialogStyle);
         builder.setCancelable(true);
         builder.setView(layout);
         return builder.create();
@@ -43,7 +43,6 @@ public class SetNetworkFragment extends BaseDialogFragment implements View.OnCli
         params.gravity = Gravity.BOTTOM;
         window.getDecorView().setPadding(0, 0, 0, 0);
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = getActivity().getResources().getInteger(R.integer.dialog_height);
         window.setAttributes(params);
     }
 

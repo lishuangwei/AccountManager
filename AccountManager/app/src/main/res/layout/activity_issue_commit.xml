@@ -1,47 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        android:layout_height="@dimen/top_max_height"
+        android:background="@color/text_blue_color"
+        android:gravity="center_horizontal"
+        android:paddingEnd="10dp"
+        android:paddingStart="16dp">
 
-        <TextView
-            android:id="@+id/loading"
-            android:layout_width="48dp"
-            android:layout_height="20dp"
-            android:gravity="center"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginEnd="20dp"
-            android:text="@string/feedback_commit"
-            android:src="@mipmap/ic_launcher" />
-    </android.support.v7.widget.Toolbar>
+        <View
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@+id/empty"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/image_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_selector" />
+
+            <TextView
+                android:id="@+id/custom_actionbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/action_register"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:maxLines="1"
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:minWidth="48dp"
+                android:layout_height="20dp"
+                android:layout_alignBaseline="@+id/custom_actionbar_title"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:src="@mipmap/ic_launcher"
+                android:text="@string/feedback_commit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_larger_size" />
+        </RelativeLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_above="@+id/bt_commit"
-        android:layout_below="@id/toolbar"
+        android:layout_marginTop="80dp"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/success_layout"
+            android:layout_width="match_parent"
+            android:layout_height="32.7dp"
+            android:layout_marginBottom="18dp"
+            android:gravity="center"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_input_correct" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:text="@string/feedback_commit_toast"
+                android:textColor="@color/text_green"
+                android:textSize="@dimen/text_normal_size" />
+
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/feedback_title" />
+            android:layout_marginStart="15dp"
+            android:text="@string/feedback_title"
+            android:textColor="#777777"
+            android:textSize="@dimen/text_larger_size" />
 
         <EditText
             android:id="@+id/feedback_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="0dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="29dp"
+            android:background="@null"
+            android:gravity="top"
+            android:lineSpacingExtra="6dp"
             android:hint="@string/feedback_content"
-            android:imeOptions="actionDone" />
+            android:imeOptions="actionDone"
+            android:textColorHint="@color/text_edit_hint_color"
+            android:textSize="@dimen/text_larger_size" />
     </LinearLayout>
 
     <Button

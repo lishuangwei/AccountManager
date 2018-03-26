@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="feeedback_label">
+        <item>系統應用</item>
+        <item>Google應用 </item>
+        <item>其他應用</item>
+        <item>性能</item>
+        <item>閃退</item>
+        <item>死機</item>
+        <item>重啓</item>
+        <item>鍵盤</item>
+        <item>相機</item>
+        <item>音頻</item>
+        <item>指紋解鎖</item>
+        <item>網絡信號</item>
+    </string-array>
+</resources>

@@ -5,65 +5,57 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.accountmanager.R;
-import com.android.accountmanager.ui.account.AccountActivity;
 import com.android.accountmanager.ui.account.SetNetworkFragment;
-import com.android.accountmanager.ui.login.LoginActivity;
 import com.android.accountmanager.utils.AppUtils;
 import com.github.ybq.android.spinkit.style.Circle;
 
 
 public class IssueCommit extends AppCompatActivity implements FeedbackContract.FeedbackView, View.OnClickListener, TextWatcher {
     private FeedbackContract.FeedBackPresenter mPresenter;
+    private LinearLayout mLayout;
     private Toast mToast;
-    private Button mBtcommit;
     private EditText mFeedbackContent;
-    private String mTile, mPkname, mIcon;
+    private String mTile, mPkname, mContent;
     private Circle mCircleDrawable;
-    private TextView mText;
+    private TextView mText, mTextTile;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_commit);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        AppUtils.setNoActionbarTheme(this);
 
         Intent intent = getIntent();
         mTile = intent == null ? "" : intent.getStringExtra("title");
         mPkname = intent == null ? "" : intent.getStringExtra("package");
         Log.d("test", "onCreate: " + mTile);
-        toolbar.setTitle(mTile);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
+
+        mTextTile = (TextView) findViewById(R.id.custom_actionbar_title);
+        mTextTile.setText(mTile);
+        mImageView = (ImageView) findViewById(R.id.image_back);
+        mImageView.setOnClickListener(this);
 
         mToast = Toast.makeText(this, "RegisterActivity", Toast.LENGTH_SHORT);
         mToast.setGravity(Gravity.CENTER, 0, 0);
         mPresenter = new FeedBackPresenter(this);
-        mBtcommit = (Button) findViewById(R.id.bt_commit);
-        mBtcommit.setOnClickListener(this);
         mFeedbackContent = (EditText) findViewById(R.id.feedback_content);
         mFeedbackContent.addTextChangedListener(this);
+        mLayout = (LinearLayout) findViewById(R.id.success_layout);
 
         mCircleDrawable = new Circle();
         mCircleDrawable.setBounds(0, 0, 100, 100);
@@ -75,36 +67,13 @@ public class IssueCommit extends AppCompatActivity implements FeedbackContract.F
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_feedback, menu);
-//        mMenuItem = menu.findItem(R.id.commit);
-//        return true;
-//    }
+    private void setSuccess() {
+        mLayout.setVisibility(View.VISIBLE);
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                onBackPressed();
-//                break;
-//            case R.id.commit:
-//                if (TextUtils.isEmpty(mFeedbackContent.getText().toString())) {
-//                    showAction(R.string.feedback_commit_null);
-//                }
-//                startLoad();
-//                item.setIcon(R.drawable.ic_no_image);
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        commit(mTile, mPkname, "");
-//                    }
-//                }, 1000);
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
+    private void setError() {
+        mLayout.setVisibility(View.INVISIBLE);
+    }
 
     @Override
     public void onBackPressed() {
@@ -136,7 +105,15 @@ public class IssueCommit extends AppCompatActivity implements FeedbackContract.F
 
     @Override
     public void startMain() {
-        finish();
+        setSuccess();
+        stopLoad();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopLoad();
+        setError();
     }
 
     @Override
@@ -146,16 +123,18 @@ public class IssueCommit extends AppCompatActivity implements FeedbackContract.F
 
     @Override
     public void showAction(CharSequence actionString) {
+        Log.d("test", "showAction111: IssueCommit");
+        stopLoad();
         mToast.setText(actionString);
         mToast.show();
-        stopLoad();
     }
 
     @Override
     public void showAction(int strId) {
+        Log.d("test", "showAction222: IssueCommit");
+        stopLoad();
         mToast.setText(strId);
         mToast.show();
-        stopLoad();
     }
 
     @Override
@@ -182,15 +161,20 @@ public class IssueCommit extends AppCompatActivity implements FeedbackContract.F
             case R.id.loading:
                 if (TextUtils.isEmpty(mFeedbackContent.getText().toString())) {
                     showAction(R.string.feedback_commit_null);
+                    setError();
                     return;
                 }
                 startLoad();
+                setError();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        commit(mTile, mPkname, "");
+                        commit(mTile, mContent, "");
                     }
                 }, 1000);
+                break;
+            case R.id.image_back:
+                onBackPressed();
                 break;
         }
     }
@@ -202,14 +186,12 @@ public class IssueCommit extends AppCompatActivity implements FeedbackContract.F
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        boolean enable = !TextUtils.isEmpty(mFeedbackContent.getText().toString());
-        Log.d("test", "onTextChanged: " + enable);
-        mBtcommit.setEnabled(enable);
 
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
+        mContent = mFeedbackContent.getText().toString();
 
     }
 }

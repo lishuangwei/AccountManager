@@ -4,14 +4,10 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.accountmanager.R;
-import com.android.accountmanager.base.BaseActivity;
 import com.android.accountmanager.commom.InternetHelper;
 import com.android.accountmanager.commom.RequestServer;
-import com.android.accountmanager.commom.RequestUri;
 import com.android.accountmanager.commom.ResultCode;
-import com.android.accountmanager.model.FeedBackTemplate;
-import com.android.accountmanager.model.LoginTemplate;
-import com.android.accountmanager.model.TemplateUtils;
+import com.android.accountmanager.model.ResultTemplate;
 import com.android.accountmanager.utils.AppUtils;
 import com.android.accountmanager.utils.JackSonUtil;
 
@@ -38,8 +34,9 @@ public class FeedBackPresenter implements FeedbackContract.FeedBackPresenter {
 
     @Override
     public void commit(final String name, final String content, final String icon) {
-        int netState = InternetHelper.getNetState(mFeedbackView.getContext());;
-        Log.d("test", "commit: "+netState);
+        int netState = InternetHelper.getNetState(mFeedbackView.getContext());
+        ;
+        Log.d("test", "commit: " + netState);
         if (netState == InternetHelper.I_NET_NONE) {
             mFeedbackView.networkAnomaly();
             return;
@@ -49,8 +46,15 @@ public class FeedBackPresenter implements FeedbackContract.FeedBackPresenter {
                 .map(new Func1<String, String>() {
                     @Override
                     public String call(String s) {
+//                        return RequestServer.getInstance()
+//                                .saveModule(mFeedbackView.getContext(), 0, name, content,icon);
+                        //modify by john , 修改了"用户反馈信息" 接口
+                        final String token = AppUtils.getCurrentToken(mFeedbackView.getContext());
+                        final String account = AppUtils.getCurrentAccount(mFeedbackView.getContext()).getAccount();
                         return RequestServer.getInstance()
-                                .saveModule(mFeedbackView.getContext(), 0, name, content,icon);
+                                .saveFeatbackInfo(mFeedbackView.getContext(), token, name, content, account);
+                        //modify by john , 修改了"用户反馈信息" 接口
+
 
                     }
                 })
@@ -59,15 +63,25 @@ public class FeedBackPresenter implements FeedbackContract.FeedBackPresenter {
                     @Override
                     public void call(String s) {
                         Log.d("test", "commit: " + s);
-                        FeedBackTemplate resultTemplate = JackSonUtil.json2Obj(s, FeedBackTemplate.class);
+                        ResultTemplate resultTemplate = JackSonUtil.json2Obj(s, ResultTemplate.class);
                         if (resultTemplate == null) {
                             mFeedbackView.showAction(R.string.toast_unknown_error);
-                            mFeedbackView.startMain();
                         } else {
                             switch (resultTemplate.getResultCode()) {
                                 case ResultCode.RC_SUCCESS:
-                                    mFeedbackView.showAction(R.string.feedback_commit_toast);
                                     mFeedbackView.startMain();
+                                    break;
+                                case ResultCode.RC_ACCOUNT_PASSWORD_ERR:
+                                    mFeedbackView.showAction(R.string.toast_account_password_error);
+                                    break;
+                                case ResultCode.RETCODE_PATAM_TYPE_ERR:
+                                    mFeedbackView.showAction(R.string.toast_param_error);
+                                    break;
+                                case ResultCode.RETCODE_USER_NON_EXIST:
+                                    mFeedbackView.showAction(R.string.toast_account_not_exist);
+                                    break;
+                                case ResultCode.RC_CODE_ERR:
+                                    mFeedbackView.showAction(R.string.toast_vercode_error);
                                     break;
                             }
                         }
@@ -85,7 +99,7 @@ public class FeedBackPresenter implements FeedbackContract.FeedBackPresenter {
 
     @Override
     public void unSubscribe() {
-
+        mSubscriptions.clear();
     }
 
     @Override

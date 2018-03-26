@@ -78,7 +78,7 @@
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">12dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@null</item>
+        <item name="android:background">@drawable/edit_input_bg</item>
     </style>
 
     <style name="dividerStyle">
@@ -133,4 +133,7 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
+    <style name="NetWorkDialogStyle" parent="@style/BottomDialog">
+        <item name="android:background">@color/white</item>
+    </style>
 </resources>

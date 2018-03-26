@@ -1,25 +1,28 @@
 package com.android.accountmanager.utils;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 
 import com.android.accountmanager.R;
+import com.android.accountmanager.base.BaseView;
 import com.android.accountmanager.commom.HandlerBus;
-import com.android.accountmanager.commom.OkHttpClientManager;
 import com.android.accountmanager.commom.RequestUri;
+import com.android.accountmanager.commom.ResultCode;
 import com.android.accountmanager.event.VercodeStateChangeEvent;
 import com.android.accountmanager.model.LoginTemplate;
+import com.android.accountmanager.model.ResultTemplate;
 import com.android.accountmanager.model.UserInfoTemplate;
 import com.android.accountmanager.model.UserUpdateTemplate;
 import com.android.accountmanager.ui.main.MainActivity;
@@ -34,6 +37,17 @@ public class AppUtils {
     public static final int TYPE_PHONENUMBER = 0;
     public static final int TYPE_VERCODE = 1;
     public static final int TYPE_PASSWORD = 2;
+    public static final int TYPE_EMAIL = 3;
+    public static final int TYPE_LOGIN_PASSWORD = 4;
+    public static final int TYPE_RESET_PASSWORD = 5;
+
+    public static final int TYPE_MDDIFY_PASSWORD = 6;
+    public static final int TYPE_BIND_EMAIL = 7;
+    public static final int TYPE_UNBIND_EMAIL = 8;
+    public static final int TYPE_FORGET_PASSWORD = 9;
+    public static final int TYPE_CHANGE_PHONE = 10;
+    public static final int TYPE_LOGING_OUT = 11;
+
 
     public static String getUniqueID() {
         if (Build.VERSION.SDK_INT < 9) {
@@ -55,7 +69,11 @@ public class AppUtils {
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_EMAIL, info.getData().getUserinfo().getEmail());
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_NAME, info.getData().getUserinfo().getFullname());
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_ICON, info.getData().getUserinfo().getIcon());
-            editor.putString(UserInfoTemplate.KEY_ACCOUNT_ID, info.getData().getUserinfo().getId());
+            //modify by john - begin, 账号ID 应该取 account , 请参考文档"手机密码登录接口", 后面"绑定邮件"，"更换手机" 都需要用到该字段
+//            editor.putString(UserInfoTemplate.KEY_ACCOUNT_ID, info.getData().getUserinfo().getId());
+            editor.putString(UserInfoTemplate.KEY_ACCOUNT_ID, info.getData().getUserinfo().getAccount());
+            //modify by john - begin, 账号ID 应该取 account , 请参考文档"手机密码登录接口", 后面"绑定邮件"，"更换手机" 都需要用到该字段
+
             editor.putInt(UserInfoTemplate.KEY_ACCOUNT_SEX, info.getData().getUserinfo().getSex());
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_TEL, info.getData().getUserinfo().getTel());
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_TOKEN, info.getData().getToken());
@@ -72,7 +90,10 @@ public class AppUtils {
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_EMAIL, info.getData().getUserinfo().getEmail());
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_NAME, info.getData().getUserinfo().getFullname());
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_ICON, info.getData().getUserinfo().getIcon());
-            editor.putString(UserInfoTemplate.KEY_ACCOUNT_ID, info.getData().getUserinfo().getId());
+            //modify by john - begin, 账号ID 应该取 account , 请参考文档"手机密码登录接口", 后面"绑定邮件"，"更换手机" 都需要用到该字段
+//            editor.putString(UserInfoTemplate.KEY_ACCOUNT_ID, info.getData().getUserinfo().getId());
+            editor.putString(UserInfoTemplate.KEY_ACCOUNT_ID, info.getData().getUserinfo().getAccount());
+            //modify by john - begin, 账号ID 应该取 account , 请参考文档"手机密码登录接口", 后面"绑定邮件"，"更换手机" 都需要用到该字段
             editor.putInt(UserInfoTemplate.KEY_ACCOUNT_SEX, info.getData().getUserinfo().getSex());
             editor.putString(UserInfoTemplate.KEY_ACCOUNT_TEL, info.getData().getUserinfo().getTel());
         }
@@ -128,10 +149,22 @@ public class AppUtils {
         return !TextUtils.isEmpty(id);
     }
 
+    public static boolean isBindEmail(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("current_account", Context.MODE_PRIVATE);
+        String email = sp.getString(UserInfoTemplate.KEY_ACCOUNT_EMAIL, "");
+        return !TextUtils.isEmpty(email);
+    }
+
+    public static void unbindEmail(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("current_account", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(UserInfoTemplate.KEY_ACCOUNT_EMAIL, "");
+    }
+
     public static void sendVercode(Context context, String type, String receiver, String vercode) {
         HandlerBus.getDefault().post(VercodeStateChangeEvent.newInstance());
         SharedPreferences sp = context.getSharedPreferences("register_vercode_list", Context.MODE_PRIVATE);
-        sp.edit().putString(receiver, vercode).commit();
+        sp.edit().putString(receiver, vercode).apply();
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context, 0, new Intent(context, MainActivity.class), 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -156,15 +189,20 @@ public class AppUtils {
     }
 
     public static boolean verifyPassword(Context context, String password) {
-//        SharedPreferences sp = context.getSharedPreferences("current_account", Context.MODE_PRIVATE);
-//        String correct = password;
-//        return StringUtils.isEquals(correct, encryptPassword(password));
-        return true;
+        SharedPreferences sp = context.getSharedPreferences("current_account", Context.MODE_PRIVATE);
+        String pass = sp.getString(UserInfoTemplate.KEY_ACCOUNT_PASSWORD, "");
+        Log.d("test", "verifyPassword: " + pass + "-----" + encryptPassword(password));
+        return StringUtils.isEquals(pass, encryptPassword(password));
+    }
+
+    public static void savePassword(Context context, String password) {
+        SharedPreferences sp = context.getSharedPreferences("current_account", Context.MODE_PRIVATE);
+        sp.edit().putString(UserInfoTemplate.KEY_ACCOUNT_PASSWORD, password).apply();
     }
 
     public static void clearCurrentAccount(Context context) {
         SharedPreferences sp = context.getSharedPreferences("current_account", Context.MODE_PRIVATE);
-        sp.edit().clear().commit();
+        sp.edit().clear().apply();
     }
 
     public static String encryptPassword(String password) {
@@ -177,5 +215,39 @@ public class AppUtils {
         }
         return null;
     }
+
+    public static void setNoActionbarTheme(Activity activity) {
+        View decorView = activity.getWindow().getDecorView();
+        int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        decorView.setSystemUiVisibility(option);
+        activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+    }
+
+    public static boolean showErrorWithResult(String s, BaseView view) {
+        ResultTemplate result = JackSonUtil.json2Obj(s, ResultTemplate.class);
+        if (result != null) {
+            switch (result.getResultCode()) {
+                case ResultCode.RC_USER_EXIST:
+                    view.showAction(R.string.toast_account_exist);
+                    return true;
+                case ResultCode.RC_INVALID_PARAM:
+                    Log.d("test", "showErrorWithResult: RC_INVALID_PARAM");
+                    view.showAction(R.string.toast_invalid_param);
+                    return true;
+                case ResultCode.RC_CODE_ERR:
+                    view.showAction(R.string.toast_vercode_error);
+                    return true;
+                case ResultCode.RC_ACCOUNT_PASSWORD_ERR:
+                    view.showAction(R.string.toast_account_password_error);
+                    return true;
+                case ResultCode.RC_TOKEN_ERR:
+                    view.showAction(R.string.toast_account_not_exist);
+                    return true;
+            }
+        }
+        return false;
+    }
+
 
 }

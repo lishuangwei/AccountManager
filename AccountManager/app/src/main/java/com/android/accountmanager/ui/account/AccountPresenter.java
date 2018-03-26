@@ -5,21 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.accountmanager.R;
 import com.android.accountmanager.base.BaseActivity;
+import com.android.accountmanager.commom.HandlerBus;
 import com.android.accountmanager.commom.InternetHelper;
 import com.android.accountmanager.commom.RequestServer;
 import com.android.accountmanager.commom.RequestUri;
-import com.android.accountmanager.commom.HandlerBus;
 import com.android.accountmanager.commom.ResultCode;
-import com.android.accountmanager.commom.SimulateServer;
 import com.android.accountmanager.event.SignOutEvent;
 import com.android.accountmanager.model.AccountTemplate;
 import com.android.accountmanager.model.LoginTemplate;
+import com.android.accountmanager.model.ModifyPasswordTemplate;
 import com.android.accountmanager.model.ResultTemplate;
-import com.android.accountmanager.model.TemplateUtils;
 import com.android.accountmanager.model.UserInfoTemplate;
 import com.android.accountmanager.model.UserUpdateTemplate;
 import com.android.accountmanager.ui.common.SetPwdFragment;
@@ -347,13 +345,24 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
 
     @Override
     public void bindPhoneNumber(final String phoneNumber, final String code) {
+        int netState = BaseActivity.getNetState();
+        if (netState == InternetHelper.I_NET_NONE) {
+            mAccountView.networkAnomaly();
+            return;
+        }
         Subscription subscription = rx.Observable.just("")
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<String, String>() {
                     @Override
                     public String call(String s) {
+//                        return RequestServer.getInstance()
+//                                .bindNewPhoneNumber(mAccountView.getContext(), phoneNumber, code, AppUtils.getCurrentToken(mAccountView.getContext()));
+                        //modify by john , 更换了接口 -- 请参考" RequestServer ：exBindPhoneNumber"
                         return RequestServer.getInstance()
-                                .bindNewPhoneNumber(mAccountView.getContext(), phoneNumber, code, AppUtils.getCurrentToken(mAccountView.getContext()));
+                                .exBindPhoneNumber(mAccountView.getContext(), phoneNumber,
+                                        AppUtils.getCurrentAccount(mAccountView.getContext()).getAccount(),
+                                        code, AppUtils.getCurrentToken(mAccountView.getContext()));
+                        //modify by john , 更换了接口 -- 请参考" RequestServer ：exBindPhoneNumber"
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -394,10 +403,10 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
     }
 
     @Override
-    public void bindMailbox(final String mailbox) {
+    public void bindMailbox(final String mailbox, final String vercode) {
         int netState = BaseActivity.getNetState();
         if (netState == InternetHelper.I_NET_NONE) {
-            mAccountView.showAction(R.string.toast_network_exception);
+            mAccountView.networkAnomaly();
             return;
         }
         Subscription subscription = rx.Observable.just("")
@@ -405,14 +414,23 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
                 .map(new Func1<String, String>() {
                     @Override
                     public String call(String s) {
+//                        return RequestServer.getInstance()
+//                                .getVercode(mAccountView.getContext(), RequestUri.TYPE_EMAIL, mailbox);
+//                        AppUtils.saveUpdateInfo(mAccountView.getContext(), "email", mailbox);
+                        //modify by john,添加密码 password 参数
                         return RequestServer.getInstance()
-                                .getVercode(mAccountView.getContext(), RequestUri.TYPE_EMAIL, mailbox);
+                                .bindEmail(mAccountView.getContext(),
+                                        AppUtils.getCurrentAccount(mAccountView.getContext()).getAccount(),
+                                        AppUtils.getAccountSharedPreferences(mAccountView.getContext()).getString(UserInfoTemplate.KEY_ACCOUNT_PASSWORD, "")
+                                        , mailbox, vercode);
+                        //modify by john,添加密码 password 参数
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
+                        Log.d("test", "call:bindMailbox =" + s);
                         ResultTemplate resultTemplate = JackSonUtil.json2Obj(s, ResultTemplate.class);
                         if (resultTemplate == null) {
                             mAccountView.showAction(R.string.toast_unknown_error);
@@ -420,6 +438,7 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
                             switch (resultTemplate.getResultCode()) {
                                 case ResultCode.RC_SUCCESS:
                                     AppUtils.saveUpdateInfo(mAccountView.getContext(), "email", mailbox);
+                                    mAccountView.startMain();
                                     mAccountView.showAction(R.string.toast_bind_mailbox);
                                     break;
                                 case ResultCode.RC_USER_EXIST:
@@ -447,26 +466,33 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
 
     @Override
     public void unBindMailbox() {
-        final LoginTemplate.DataBean.UserinfoBean currentInfo = AppUtils.getCurrentAccount(mAccountView.getContext());
+        int netState = BaseActivity.getNetState();
+        if (netState == InternetHelper.I_NET_NONE) {
+            mAccountView.networkAnomaly();
+            return;
+        }
         Subscription subscription = rx.Observable.just("")
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<String, String>() {
                     @Override
                     public String call(String s) {
                         return RequestServer.getInstance()
-                                .unBindEmail(mAccountView.getContext(), AppUtils.getCurrentAccount(mAccountView.getContext()).getEmail().toString(), null);
+                                .unBindEmail(mAccountView.getContext(), AppUtils.getCurrentAccount(mAccountView.getContext()).getEmail(),
+                                        AppUtils.getCurrentAccount(mAccountView.getContext()).getAccount(), null);// add by john, 添加了account 参数，详细请参照文档
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
+                        Log.d("test", "call: unBindMailbox " + s);
                         ResultTemplate resultTemplate = JackSonUtil.json2Obj(s, ResultTemplate.class);
                         if (resultTemplate == null) {
                             mAccountView.showAction(R.string.toast_unknown_error);
                         } else {
                             switch (resultTemplate.getResultCode()) {
                                 case ResultCode.RC_SUCCESS:
+                                    AppUtils.unbindEmail(mAccountView.getContext());
                                     mAccountView.showAction(R.string.toast_unbind_email_success);
                                     break;
                                 case ResultCode.RC_USER_EXIST:
@@ -484,25 +510,35 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
                                 case ResultCode.RC_TOKEN_ERR:
                                     mAccountView.showAction(R.string.toast_account_not_exist);
                                     break;
+                                case ResultCode.RC_EMAIL_NOT_EXIST:
+                                    mAccountView.showAction(R.string.toast_email_not_exist);
+                                    break;
                             }
                         }
-
                     }
+
                 });
         mSubscriptions.add(subscription);
     }
 
     @Override
     public void modifyPassword(final String password) {
-        final LoginTemplate.DataBean.UserinfoBean currentInfo = AppUtils.getCurrentAccount(mAccountView.getContext());
+        int netState = BaseActivity.getNetState();
+        if (netState == InternetHelper.I_NET_NONE) {
+            mAccountView.networkAnomaly();
+            return;
+        }
         Subscription subscription = rx.Observable.just("")
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<String, String>() {
                     @Override
                     public String call(String s) {
+//                        return RequestServer.getInstance()
+//                                .setNewPassword(mAccountView.getContext(), RequestUri.TYPE_TEL,
+//                                        currentInfo.getTel(), AppUtils.encryptPassword(password));
                         return RequestServer.getInstance()
-                                .setNewPassword(mAccountView.getContext(), RequestUri.TYPE_TEL,
-                                        currentInfo.getTel(), AppUtils.encryptPassword(password));
+                                .setNewPassword(mAccountView.getContext(),
+                                        AppUtils.getCurrentToken(mAccountView.getContext()), AppUtils.encryptPassword(password));
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -510,13 +546,16 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
                     @Override
                     public void call(String s) {
                         Log.d("test", "call: modifyPassword" + s);
-                        ResultTemplate resultTemplate = JackSonUtil.json2Obj(s, ResultTemplate.class);
+                        if (AppUtils.showErrorWithResult(s, mAccountView)) return;
+                        ModifyPasswordTemplate resultTemplate = JackSonUtil.json2Obj(s, ModifyPasswordTemplate.class);
                         if (resultTemplate == null) {
                             mAccountView.showAction(R.string.toast_unknown_error);
                         } else {
                             switch (resultTemplate.getResultCode()) {
                                 case ResultCode.RC_SUCCESS:
-                                    HandlerBus.getDefault().post(SignOutEvent.newInstance());
+                                    AppUtils.savePassword(mAccountView.getContext(), AppUtils.encryptPassword(password));
+                                    //HandlerBus.getDefault().post(SignOutEvent.newInstance());
+                                    mAccountView.startMain();
                                     mAccountView.showAction(R.string.toast_reset_password_success);
                                     break;
                                 case ResultCode.RC_USER_EXIST:
@@ -545,7 +584,7 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
     @Override
     public void getAccount(final String type) {
         if (BaseActivity.getNetState() == InternetHelper.I_NET_NONE) {
-            mAccountView.showAction(R.string.toast_network_exception);
+            mAccountView.networkAnomaly();
             return;
         }
         Subscription subscription = rx.Observable.just("")
@@ -594,10 +633,11 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
     }
 
     @Override
-    public void login(final String loginType, final String name, final String password, final boolean isEmail) {
+    public void login(final String loginType, final String name, final String password,
+                      final int type) {
         int netState = BaseActivity.getNetState();
         if (netState == InternetHelper.I_NET_NONE) {
-            mAccountView.showAction(R.string.toast_network_exception);
+            mAccountView.networkAnomaly();
             return;
         }
         Subscription subscription = rx.Observable.just("")
@@ -606,7 +646,7 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
                     @Override
                     public String call(String s) {
                         return RequestServer.getInstance()
-                                .login(mAccountView.getContext(), 0, loginType, name, password);
+                                .login(mAccountView.getContext(), 0, loginType, name, AppUtils.encryptPassword(password));
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -614,28 +654,30 @@ public class AccountPresenter implements AccountContract.AccountPresenter {
                     @Override
                     public void call(String s) {
                         Log.d("test", "login accountpresenter: " + s);
-                        if (s.contains(ResultCode.RC_ACCOUNT_PASSWORD_ERR + "")) {
-                            mAccountView.showAction(R.string.toast_account_password_error);
-                            mAccountView.nextStep(isEmail);
-                            return;
-                        }
-
+                        if (AppUtils.showErrorWithResult(s, mAccountView)) return;
                         LoginTemplate resultTemplate = JackSonUtil.json2Obj(s, LoginTemplate.class);
                         if (resultTemplate == null) {
-                            mAccountView.nextStep(isEmail);
                             mAccountView.showAction(R.string.toast_unknown_error);
                         } else {
                             switch (resultTemplate.getResultCode()) {
                                 case ResultCode.RC_SUCCESS:
-                                    if (!isEmail) {
+                                    AppUtils.savePassword(mAccountView.getContext(), AppUtils.encryptPassword(password));
+                                    if (type == AppUtils.TYPE_MDDIFY_PASSWORD) {
                                         SetPwdFragment setPwdFragment = new SetPwdFragment();
                                         Bundle args = new Bundle();
                                         args.putString("type", RequestUri.TYPE_TEL);
                                         args.putString("identifier", mAccountView.getModifyName());
                                         setPwdFragment.setArguments(args);
-                                        mAccountView.nextStep(isEmail);
-                                    } else {
-                                        mAccountView.nextStep(isEmail);
+                                        mAccountView.nextStep(false);
+                                    } else if (type == AppUtils.TYPE_BIND_EMAIL) {
+                                        mAccountView.nextStep(true);
+                                    } else if (type == AppUtils.TYPE_UNBIND_EMAIL) {
+                                        mAccountView.unBindMailbox();
+                                    } else if (type == AppUtils.TYPE_CHANGE_PHONE) {
+                                        Bundle arg = new Bundle();
+                                        arg.putString("title", mAccountView.getContext().getString(R.string.action_change_phone));
+                                        mAccountView.startFragmentNew(
+                                                "com.android.accountmanager.ui.account.PhoneNumberFragment$PhoneNumberBindFragment", arg);
                                     }
                                     break;
                                 case ResultCode.RC_USER_EXIST:

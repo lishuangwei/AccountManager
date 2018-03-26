@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="feeedback_label">
+        <item>System issue</item>
+        <item>Google</item>
+        <item>Other App</item>
+        <item>Function</item>
+        <item>Flash back</item>
+        <item>System halted</item>
+        <item>Restart</item>
+        <item>Keyboard</item>
+        <item>Camera</item>
+        <item>Audio</item>
+        <item>Fingerprint</item>
+        <item>Signal</item>
+    </string-array>
+
+    <string-array name="feedbak_icon">
+        <item>@drawable/ic_feedback_system</item>
+        <item>@drawable/ic_feedback_google</item>
+        <item>@drawable/ic_feedback_other</item>
+        <item>@drawable/ic_feedback_function</item>
+        <item>@drawable/ic_feedback_token</item>
+        <item>@drawable/ic_feedback_die</item>
+        <item>@drawable/ic_feedback_reboot</item>
+        <item>@drawable/ic_feedback_keyboard</item>
+        <item>@drawable/ic_feedback_camera</item>
+        <item>@drawable/ic_feedback_audio</item>
+        <item>@drawable/ic_feedback_fingprint</item>
+        <item>@drawable/ic_feedback_network</item>
+    </string-array>
+</resources>

@@ -24,10 +24,6 @@ import com.android.accountmanager.event.VercodeStateChangeEvent;
 import com.android.accountmanager.receiver.NetBroadcastReceiver;
 import com.android.accountmanager.utils.AppUtils;
 
-/**
- * Created by Administrator on 2016/11/30 0030.
- */
-
 public abstract class BaseActivity extends AppCompatActivity implements HandlerBus.EventChangeListener {
     private final int REQUEST_CODE_PERMISSION = 0;
     public static int sNetState;
@@ -74,16 +70,17 @@ public abstract class BaseActivity extends AppCompatActivity implements HandlerB
 
     @Override
     public void signOutEvent(SignOutEvent event) {
-        AppUtils.clearCurrentAccount(this);
+        Log.d("test", "signOutEvent: BaseActivity");
     }
 
     @Override
     protected void onStop() {
+        super.onStop();
         if (isFinishing()) {
             HandlerBus.getDefault().unRegister(this);
+            Log.d("shuang", "unregister: ");
             unregisterReceiver(mReceiver);
         }
-        super.onStop();
     }
 
     @Override
