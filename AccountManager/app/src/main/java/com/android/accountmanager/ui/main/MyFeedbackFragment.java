@@ -43,7 +43,6 @@ public class MyFeedbackFragment extends Fragment implements AdapterView.OnItemCl
     private CompositeSubscription mSubscriptions;
     private ProgressBar mProgress;
     private MyAdapter myAdapter;
-    private int mColor, mVisible, mPosition;
     private TextView mText;
 
     @Override
@@ -126,7 +125,6 @@ public class MyFeedbackFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        mPosition = i;
         Bundle arg = new Bundle();
         arg.putString("content", mDate.get(i).getMtcontent());
         arg.putString("date", mDate.get(i).getMtdate());
@@ -137,8 +135,6 @@ public class MyFeedbackFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        Log.d("test", "onActivityResult: MyFeedbackFragment" + requestCode + "----" + resultCode);
         if (requestCode == FeedBackUtils.FEEDBACK_REQUEST) {
             Log.d("test", "onActivityResult: MyFeedbackFragment1111");
         }
